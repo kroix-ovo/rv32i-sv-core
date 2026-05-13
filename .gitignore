@@ -1,0 +1,33 @@
+# Vivado generated files
+*.jou
+*.log
+*.str
+*.dcp
+*.bit
+*.ltx
+*.runs/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+*.xpr
+*.Xil/
+
+# Simulation outputs
+*.vcd
+*.fst
+*.wdb
+*.vvp
+sim/output/
+sim/build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
