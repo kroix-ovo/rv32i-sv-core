@@ -12,10 +12,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install Icarus Verilog
-        run: sudo apt-get update && sudo apt-get install -y iverilog
+      - name: Install RTL simulators
+        run: sudo apt-get update && sudo apt-get install -y iverilog verilator
+      - name: Install Python verification dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements-dev.txt
       - name: Build programs and run RTL tests
         run: make test
       - name: Check reference model
         run: python python/rv32i_model.py
-
