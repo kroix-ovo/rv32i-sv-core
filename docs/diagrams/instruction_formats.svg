@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">RV32I instruction formats</title>
+  <desc id="desc">The R, I, S, B, U, and J instruction field layouts from bit 31 to bit 0.</desc>
+  <style>.box{fill:#fff;stroke:#111;stroke-width:1.5}.shade{fill:#eee;stroke:#111;stroke-width:1.5}.label{font:15px Arial,sans-serif;text-anchor:middle;dominant-baseline:middle}.row{font:bold 17px Arial,sans-serif;text-anchor:end;dominant-baseline:middle}.bit{font:12px Arial,sans-serif;fill:#333;text-anchor:middle}.title{font:bold 24px Georgia,serif;text-anchor:middle}</style>
+  <rect width="1200" height="520" fill="#fff"/>
+  <text x="600" y="35" class="title">RV32I 32-bit instruction formats</text>
+  <text x="140" y="70" class="bit">31</text><text x="1110" y="70" class="bit">0</text>
+
+  <g transform="translate(0,85)">
+    <text x="105" y="30" class="row">R-type</text>
+    <rect x="140" y="0" width="210" height="60" class="shade"/><text x="245" y="30" class="label">funct7 [31:25]</text>
+    <rect x="350" y="0" width="150" height="60" class="box"/><text x="425" y="30" class="label">rs2 [24:20]</text>
+    <rect x="500" y="0" width="150" height="60" class="box"/><text x="575" y="30" class="label">rs1 [19:15]</text>
+    <rect x="650" y="0" width="90" height="60" class="shade"/><text x="695" y="30" class="label">funct3</text>
+    <rect x="740" y="0" width="150" height="60" class="box"/><text x="815" y="30" class="label">rd [11:7]</text>
+    <rect x="890" y="0" width="220" height="60" class="shade"/><text x="1000" y="30" class="label">opcode [6:0]</text>
+  </g>
+  <g transform="translate(0,155)">
+    <text x="105" y="30" class="row">I-type</text>
+    <rect x="140" y="0" width="360" height="60" class="shade"/><text x="320" y="30" class="label">immediate [11:0]</text>
+    <rect x="500" y="0" width="150" height="60" class="box"/><text x="575" y="30" class="label">rs1</text>
+    <rect x="650" y="0" width="90" height="60" class="shade"/><text x="695" y="30" class="label">funct3</text>
+    <rect x="740" y="0" width="150" height="60" class="box"/><text x="815" y="30" class="label">rd</text>
+    <rect x="890" y="0" width="220" height="60" class="shade"/><text x="1000" y="30" class="label">opcode</text>
+  </g>
+  <g transform="translate(0,225)">
+    <text x="105" y="30" class="row">S-type</text>
+    <rect x="140" y="0" width="210" height="60" class="shade"/><text x="245" y="30" class="label">imm [11:5]</text>
+    <rect x="350" y="0" width="150" height="60" class="box"/><text x="425" y="30" class="label">rs2</text>
+    <rect x="500" y="0" width="150" height="60" class="box"/><text x="575" y="30" class="label">rs1</text>
+    <rect x="650" y="0" width="90" height="60" class="shade"/><text x="695" y="30" class="label">funct3</text>
+    <rect x="740" y="0" width="150" height="60" class="shade"/><text x="815" y="30" class="label">imm [4:0]</text>
+    <rect x="890" y="0" width="220" height="60" class="shade"/><text x="1000" y="30" class="label">opcode</text>
+  </g>
+  <g transform="translate(0,295)">
+    <text x="105" y="30" class="row">B-type</text>
+    <rect x="140" y="0" width="210" height="60" class="shade"/><text x="245" y="30" class="label">imm [12|10:5]</text>
+    <rect x="350" y="0" width="150" height="60" class="box"/><text x="425" y="30" class="label">rs2</text>
+    <rect x="500" y="0" width="150" height="60" class="box"/><text x="575" y="30" class="label">rs1</text>
+    <rect x="650" y="0" width="90" height="60" class="shade"/><text x="695" y="30" class="label">funct3</text>
+    <rect x="740" y="0" width="150" height="60" class="shade"/><text x="815" y="30" class="label">imm [4:1|11]</text>
+    <rect x="890" y="0" width="220" height="60" class="shade"/><text x="1000" y="30" class="label">opcode</text>
+  </g>
+  <g transform="translate(0,365)">
+    <text x="105" y="30" class="row">U-type</text>
+    <rect x="140" y="0" width="600" height="60" class="shade"/><text x="440" y="30" class="label">immediate [31:12]</text>
+    <rect x="740" y="0" width="150" height="60" class="box"/><text x="815" y="30" class="label">rd</text>
+    <rect x="890" y="0" width="220" height="60" class="shade"/><text x="1000" y="30" class="label">opcode</text>
+  </g>
+  <g transform="translate(0,435)">
+    <text x="105" y="30" class="row">J-type</text>
+    <rect x="140" y="0" width="600" height="60" class="shade"/><text x="440" y="30" class="label">imm [20|10:1|11|19:12]</text>
+    <rect x="740" y="0" width="150" height="60" class="box"/><text x="815" y="30" class="label">rd</text>
+    <rect x="890" y="0" width="220" height="60" class="shade"/><text x="1000" y="30" class="label">opcode</text>
+  </g>
+</svg>

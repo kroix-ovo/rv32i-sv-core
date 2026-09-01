@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
+  <title id="title">Load instruction ready-valid timing</title>
+  <desc id="desc">A load instruction moves from fetch through execute to memory. Instruction valid stays asserted through a two-cycle wait. Data valid and address remain stable until data ready completes the transfer and retirement pulses.</desc>
+  <defs><style>.axis{stroke:#64748b;stroke-width:1}.high{stroke:#176b63;stroke-width:4;fill:none}.low{stroke:#9aa7b5;stroke-width:2;fill:none}.edge{stroke:#d5dde5;stroke-width:1}.label{font:bold 15px Arial,sans-serif;fill:#183153;text-anchor:end}.tick{font:13px Arial,sans-serif;fill:#34495e;text-anchor:middle}.state{font:bold 14px Arial,sans-serif;fill:#183153;text-anchor:middle}.note{font:13px Arial,sans-serif;fill:#34495e}.title{font:bold 24px Georgia,serif;text-anchor:middle;fill:#183153}</style></defs>
+  <rect width="1200" height="470" fill="#fff"/><text x="600" y="35" class="title">LW timeline with memory wait states</text>
+  <g transform="translate(0,0)"><path d="M240 70 V420 M370 70 V420 M500 70 V420 M630 70 V420 M760 70 V420 M890 70 V420 M1020 70 V420" class="edge"/></g>
+  <text x="305" y="78" class="state">FETCH</text><text x="435" y="78" class="state">FETCH</text><text x="565" y="78" class="state">EXECUTE</text><text x="695" y="78" class="state">MEMORY</text><text x="825" y="78" class="state">MEMORY</text><text x="955" y="78" class="state">FETCH</text>
+  <text x="215" y="125" class="label">imem_valid</text><path d="M240 145 V105 H500 V145 H1020" class="high"/>
+  <text x="215" y="190" class="label">imem_ready</text><path d="M240 210 H370 V170 H500 V210 H1020" class="high"/>
+  <text x="215" y="255" class="label">dmem_valid</text><path d="M240 275 H630 V235 H890 V275 H1020" class="high"/>
+  <text x="215" y="320" class="label">dmem_ready</text><path d="M240 340 H760 V300 H890 V340 H1020" class="high"/>
+  <text x="215" y="385" class="label">retire_valid</text><path d="M240 405 H760 V365 H890 V405 H1020" class="high"/>
+  <text x="685" y="225" class="note">address and controls remain stable</text><text x="825" y="294" class="note">transfer</text><text x="825" y="359" class="note">retire</text>
+</svg>

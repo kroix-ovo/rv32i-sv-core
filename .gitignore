@@ -12,14 +12,18 @@
 *.sim/
 *.xpr
 *.Xil/
+build/
 
 # Simulation outputs
 *.vcd
 *.fst
 *.wdb
 *.vvp
+results.xml
 sim/output/
 sim/build/
+tmp/
+.firecrawl/
 
 # Python
 __pycache__/
