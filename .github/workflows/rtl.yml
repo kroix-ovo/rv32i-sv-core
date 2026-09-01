@@ -12,8 +12,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install RTL simulators
-        run: sudo apt-get update && sudo apt-get install -y iverilog verilator
+      - name: Install Verilator 5.048
+        uses: veryl-lang/setup-verilator@b155747595eb4b817473a83045ba1da581c4084b # v1
+        with:
+          version: "5.048"
+      - name: Install Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
       - name: Install Python verification dependencies
         run: python -m pip install --upgrade pip && python -m pip install -r requirements-dev.txt
       - name: Build programs and run RTL tests
