@@ -6,10 +6,11 @@ The design uses a multicycle controller. An ordinary ALU instruction takes a fet
 
 ![RV32I core datapath](docs/diagrams/core_datapath.svg)
 
-The current measured implementation snapshot is below. These are reproducible
-core-only synthesis and simulation results, not post-route FPGA claims.
+The implementation sheet below ties each number to its workload, tool flow,
+core boundary, and timing assumptions. These are reproducible core-only
+synthesis and simulation results, not post-route FPGA claims.
 
-[![OSS CAD Suite synthesis and performance results](docs/diagrams/generated/oss-cad-results.png)](docs/synthesis_and_performance.md)
+[![RV32I synthesis and cycle characterization sheet](docs/diagrams/generated/oss-cad-results.png)](docs/synthesis_and_performance.md)
 
 For a deeper design review, open the
 [interactive Archify architecture map](docs/archify/rv32i-core.architecture.html).
@@ -133,7 +134,7 @@ Start with the [architecture guide](output/pdf/architecture.pdf), then explore t
 
 The sources that informed the design are listed in [docs/references.md](docs/references.md). The RTL and diagram specification are original work. PicoRV32 and Ibex informed memory-interface and documentation choices; Aegis-Stream informed the concise invariant-focused RTL comment structure and layered simulation workflow; Archify renders and validates the interactive architecture artifact.
 
-## Measured implementation snapshot
+## Measured implementation data
 
 On 2026-09-05, the 134-instruction directed workload completed in 282 measured
 cycles with zero-wait instruction and data ports: **2.104 CPI / 0.475 IPC**.

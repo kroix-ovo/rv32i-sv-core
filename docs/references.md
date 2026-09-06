@@ -32,6 +32,10 @@ The ISA behavior comes from the RISC-V specification. Open cores were used to st
 ## Architecture presentation
 
 - [Archify](https://github.com/tt-a1i/archify). Archify 2.16.0 renders the checked-in typed JSON specification as the interactive architecture map. Its showcase validator is also used to check crossings, route clarity, label clearance, and desktop readability. The CPU topology, signal names, guided views, and explanatory cards remain project-authored and are derived from this repository's RTL.
+- [Microsoft architecture diagram guidance](https://learn.microsoft.com/en-us/azure/well-architected/architect-role/design-diagrams).
+  Its recommendations for directional arrows, explicit relationship labels,
+  consistent line semantics, compact legends, and layered detail inform the
+  engineering-report presentation of the generated implementation sheet.
 
 ## Next verification references
 

@@ -5,7 +5,7 @@ maps in open-source synthesis. It keeps three questions separate: functional
 correctness, cycle cost under stated memory assumptions, and estimated
 resources before FPGA placement and routing.
 
-![RV32I OSS CAD Suite results](diagrams/generated/oss-cad-results.png)
+![RV32I synthesis and cycle characterization sheet](diagrams/generated/oss-cad-results.png)
 
 ## Toolchain and reproduction
 
