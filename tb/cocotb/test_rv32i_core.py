@@ -8,6 +8,7 @@ model already used by this repository.
 
 from __future__ import annotations
 
+import json
 import random
 import sys
 from dataclasses import dataclass
@@ -49,12 +50,19 @@ class Request:
 class MemoryAgent:
     """Serve instruction and data requests with reproducible wait states."""
 
-    def __init__(self, dut, words: list[int], seed: int = 0x32_1C):
+    def __init__(
+        self,
+        dut,
+        words: list[int],
+        seed: int = 0x32_1C,
+        max_delay: int = 3,
+    ):
         self.dut = dut
         self.memory = bytearray(4096)
         for index, word in enumerate(words):
             self.memory[index * 4:index * 4 + 4] = word.to_bytes(4, "little")
         self.random = random.Random(seed)
+        self.max_delay = max_delay
         self.imem_request: Request | None = None
         self.dmem_request: Request | None = None
         self.imem_wait_cycles = 0
@@ -71,7 +79,7 @@ class MemoryAgent:
         if self.imem_request is None and int(self.dut.imem_valid_o.value):
             self.imem_request = Request(
                 address=int(self.dut.imem_addr_o.value),
-                delay=self.random.randrange(0, 4),
+                delay=self.random.randrange(0, self.max_delay + 1),
             )
 
     def _capture_dmem(self) -> None:
@@ -81,7 +89,7 @@ class MemoryAgent:
                 write=bool(self.dut.dmem_write_o.value),
                 data=int(self.dut.dmem_wdata_o.value),
                 strobes=int(self.dut.dmem_wstrb_o.value),
-                delay=self.random.randrange(0, 4),
+                delay=self.random.randrange(0, self.max_delay + 1),
             )
 
     def _assert_stable(self) -> None:
@@ -218,12 +226,89 @@ async def directed_program_matches_reference_model(dut):
         raise AssertionError(f"timeout at pc=0x{int(dut.debug_pc_o.value):08x}")
 
     memory_task.cancel()
+    cycles = _cycle + 1
+    wait_metrics = {
+        "scenario": "deterministic_0_to_3_cycle_waits",
+        "cycles": cycles,
+        "retired_instructions": retirements,
+        "cpi": round(cycles / retirements, 6),
+        "ipc": round(retirements / cycles, 6),
+        "instruction_wait_cycles": memory.imem_wait_cycles,
+        "data_wait_cycles": memory.dmem_wait_cycles,
+        "instruction_transactions": memory.instruction_handshakes,
+        "data_transactions": memory.data_handshakes,
+    }
+    wait_metrics_path = (
+        ROOT / "sim" / "build" / "cocotb" / "performance-waits.json"
+    )
+    wait_metrics_path.write_text(json.dumps(wait_metrics, indent=2) + "\n")
+    dut._log.info(
+        "PERF deterministic-waits: cycles=%d retired=%d cpi=%.3f "
+        "imem_wait=%d dmem_wait=%d imem_txn=%d dmem_txn=%d",
+        cycles,
+        retirements,
+        cycles / retirements,
+        memory.imem_wait_cycles,
+        memory.dmem_wait_cycles,
+        memory.instruction_handshakes,
+        memory.data_handshakes,
+    )
     assert retirements == model.retired >= 100
     assert memory.imem_wait_cycles > 0
     assert memory.dmem_wait_cycles > 0
     assert (STATE_FETCH, STATE_EXECUTE) in state_transitions
     assert (STATE_EXECUTE, STATE_MEMORY) in state_transitions
     assert (STATE_MEMORY, STATE_FETCH) in state_transitions
+
+
+@cocotb.test()
+async def zero_wait_program_performance(dut):
+    """Measure architectural throughput when both memory ports answer at once."""
+
+    words = load_words(ROOT / "sim" / "programs" / "rv32i_directed.hex")
+    initialize_inputs(dut)
+    cocotb.start_soon(Clock(dut.clk_i, 10, unit="ns").start())
+    memory = MemoryAgent(dut, words, max_delay=0)
+    memory_task = cocotb.start_soon(memory.run())
+    await reset(dut)
+
+    retirements = 0
+    for _cycle in range(20_000):
+        await RisingEdge(dut.clk_i)
+        await ReadOnly()
+        assert not int(dut.trap_valid_o.value)
+        retirements += int(dut.retire_valid_o.value)
+
+        signature = memory.read_word(SIGNATURE_ADDRESS)
+        assert signature != FAIL_SIGNATURE
+        if signature == PASS_SIGNATURE:
+            break
+    else:
+        raise AssertionError(f"timeout at pc=0x{int(dut.debug_pc_o.value):08x}")
+
+    memory_task.cancel()
+    cycles = _cycle + 1
+    metrics = {
+        "scenario": "zero_wait",
+        "cycles": cycles,
+        "retired_instructions": retirements,
+        "cpi": round(cycles / retirements, 6),
+        "ipc": round(retirements / cycles, 6),
+        "instruction_transactions": memory.instruction_handshakes,
+        "data_transactions": memory.data_handshakes,
+    }
+    metrics_path = ROOT / "sim" / "build" / "cocotb" / "performance.json"
+    metrics_path.write_text(json.dumps(metrics, indent=2) + "\n")
+    dut._log.info(
+        "PERF zero-wait: cycles=%d retired=%d cpi=%.3f ipc=%.3f "
+        "imem_txn=%d dmem_txn=%d",
+        cycles,
+        retirements,
+        cycles / retirements,
+        retirements / cycles,
+        memory.instruction_handshakes,
+        memory.data_handshakes,
+    )
 
 
 @cocotb.test()

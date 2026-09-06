@@ -6,6 +6,11 @@ The design uses a multicycle controller. An ordinary ALU instruction takes a fet
 
 ![RV32I core datapath](docs/diagrams/core_datapath.svg)
 
+The current measured implementation snapshot is below. These are reproducible
+core-only synthesis and simulation results, not post-route FPGA claims.
+
+[![OSS CAD Suite synthesis and performance results](docs/diagrams/generated/oss-cad-results.png)](docs/synthesis_and_performance.md)
+
 For a deeper design review, open the
 [interactive Archify architecture map](docs/archify/rv32i-core.architecture.html).
 It adds guided instruction, load, and control/trap views; relationship tracing;
@@ -42,6 +47,7 @@ This is an unprivileged core. It does not contain machine-mode CSRs, interrupts,
 | `sim/programs/` | Generated test and FPGA demo images |
 | `fpga/` | Arty A7 top module and pin constraints |
 | `scripts/` | PowerShell and Vivado batch commands |
+| `reports/oss-cad/` | Machine-readable synthesis metrics and complete Yosys logs |
 | `docs/` | Architecture, interactive/static diagrams, instruction notes, and lab guides |
 
 ## Verification quick start
@@ -62,6 +68,18 @@ independent Python model):
 make test PYTHON=.venv/bin/python
 make lint-verilator
 ```
+
+Generate the measured OSS CAD Suite synthesis and performance report:
+
+```bash
+make oss-cad-report PYTHON=.venv/bin/python
+```
+
+The target expects the installed suite at
+`../oss-cad-suite-build-main/oss-cad-suite`; override `OSS_CAD_ROOT` if it is
+elsewhere. The flow uses the suite's Slang frontend for the SystemVerilog
+package/import syntax, then runs generic Yosys synthesis and a Xilinx 7-series
+technology estimate.
 
 Generate a compact FST waveform and open the curated CPU signal groups:
 
@@ -115,9 +133,37 @@ Start with the [architecture guide](output/pdf/architecture.pdf), then explore t
 
 The sources that informed the design are listed in [docs/references.md](docs/references.md). The RTL and diagram specification are original work. PicoRV32 and Ibex informed memory-interface and documentation choices; Aegis-Stream informed the concise invariant-focused RTL comment structure and layered simulation workflow; Archify renders and validates the interactive architecture artifact.
 
+## Measured implementation snapshot
+
+On 2026-09-05, the 134-instruction directed workload completed in 282 measured
+cycles with zero-wait instruction and data ports: **2.104 CPI / 0.475 IPC**.
+At a hypothetical 100 MHz clock that rate is 47.5 MIPS, but 100 MHz is only a
+conversion point until place-and-route timing closes. With the regression's
+seeded 0–3-cycle memory delays, the same workload completed in 501 cycles:
+**3.739 CPI / 0.267 IPC**, including 200 instruction-port and 20 data-port wait
+cycles.
+
+OSS CAD Suite 2026-09-05 (Yosys 0.68+195 and the Slang frontend) synthesized
+`rv32i_core` successfully. The generic result contains 8,307 cells, including
+1,269 sequential cells and 1,149 mux cells. Mapping to Xilinx 7-series
+primitives estimates **2,132 logic cells**, **1,270 flip-flops**, 2,429 LUT
+primitives, and 52 `CARRY4` cells. This intentionally excludes the SoC memory
+wrapper and is a pre-place-and-route estimate; Vivado remains the authority for
+Arty A7 utilization, BRAM inference, timing, and maximum clock frequency.
+
+See [the full synthesis and performance report](docs/synthesis_and_performance.md)
+and the checked-in [machine-readable summary](reports/oss-cad/summary.json).
+
 ## Current verification record
 
-On 2026-09-01, Verilator 5.048 elaborated and linted the RTL, and cocotb 2.0.1 passed both CPU tests with a 5.11 us FST trace. The directed test matched at least 100 retirements against the Python model while randomized deterministic wait states exercised both memory ports. The existing Icarus suites passed all 10 ALU checks, the full directed program, and all 9 trap checks. The Python model reached the pass signature after 134 retired instructions. The included GitHub Actions job repeats the non-GUI checks on every push and pull request.
+On 2026-09-05, Verilator 5.048 elaborated the RTL and cocotb 2.0.1 passed all
+three CPU tests: the reference-model comparison with wait states, the zero-wait
+performance measurement, and the sticky illegal-instruction trap check. The
+directed tests matched 134 retirements against the Python model while exercising
+both memory ports. The existing Icarus suites passed all 10 ALU checks, the full
+directed program, and all 9 trap checks. The Python model reached the pass
+signature after 134 retired instructions. The included GitHub Actions job
+repeats the non-GUI checks on every push and pull request.
 
 Vivado was not installed in the development shell used for this pass, so the checked-in xsim and bitstream scripts still need to be run on a Vivado installation before an FPGA result is claimed. See [docs/debug_log.md](docs/debug_log.md) for the exact record.
 

@@ -32,8 +32,9 @@ three wait cycles, checks every held request remains stable, and services
 little-endian writes using the RTL byte strobes.
 
 The directed cocotb test compares every retirement PC and instruction against
-`python/rv32i_model.py`. A second test independently checks the illegal-
-instruction cause, PC, tval, state, and sticky behavior. Run:
+`python/rv32i_model.py`. A second test measures the same workload with no
+inserted memory waits. A third independently checks the illegal-instruction
+cause, PC, tval, state, and sticky behavior. Run:
 
 ```bash
 make test-cocotb PYTHON=.venv/bin/python
@@ -44,6 +45,11 @@ The waveform run writes `sim/build/cocotb/dump.fst`. Use
 `waves/rv32i_core.gtkw` or `scripts/open_wave.sh` to inspect the controller,
 retirement stream, memory handshakes, and traps. GTKWave supports diagnosis; it
 does not replace the self-checking scoreboards.
+
+The two workload tests record cycles, retirements, CPI, IPC, transaction
+counts, and inserted wait cycles. `make oss-cad-report` combines those
+measurements with generic and Xilinx 7-series Yosys synthesis; see
+[synthesis_and_performance.md](synthesis_and_performance.md).
 
 ## Protocol assertions
 
@@ -67,7 +73,10 @@ Before treating the core as production-ready, add the official RISC-V Architectu
 | Trap test | Nine expected trap records |
 | Verilator lint | Successful elaboration with reviewed diagnostics |
 | cocotb directed test | Pass signature, no trap, matching retirement stream, observed wait states |
+| cocotb performance test | Pass signature; 134 retirements; metrics file written |
 | cocotb trap test | Illegal-instruction record is correct and remains sticky |
+| OSS CAD generic synthesis | Successful Slang elaboration; Yosys `check` reports zero problems |
+| OSS CAD XC7 mapping | Successful core-only Xilinx 7-series technology estimate |
 | Vivado synthesis | No critical warnings about inferred latches, multiple drivers, or unconstrained ports |
 | Vivado timing | Worst negative slack is nonnegative for the 10 ns board clock |
 | FPGA demo | Heartbeat LED changes, software LED blinks, trap LED stays off |

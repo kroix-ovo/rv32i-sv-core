@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">RV32I OSS CAD Suite synthesis and performance snapshot</title>
+  <desc id="desc">Verified Yosys XC7 resource estimates and zero-wait Verilator performance for the RV32I core.</desc>
+  <style>
+    .bg { fill:#08111f } .card { fill:#111f33; stroke:#29415f; stroke-width:2 }
+    .title { fill:#f6f8fb; font:700 31px system-ui,sans-serif }
+    .sub { fill:#9fb3c8; font:16px system-ui,sans-serif }
+    .number { fill:#62d3ff; font:700 37px ui-monospace,monospace }
+    .label { fill:#d7e2ee; font:15px system-ui,sans-serif }
+    .heading { fill:#f6f8fb; font:700 20px system-ui,sans-serif }
+    .bar { fill:#2f9fd0 } .barlabel,.barvalue { fill:#d7e2ee; font:14px ui-monospace,monospace }
+    .foot { fill:#8398ad; font:13px system-ui,sans-serif }
+  </style>
+  <rect width="1200" height="650" class="bg"/>
+  <text x="55" y="58" class="title">RV32I implementation snapshot</text>
+  <text x="55" y="88" class="sub">OSS CAD Suite 2026-09-05 · Yosys 0.68+195 · target: Xilinx 7-series estimate</text>
+  <g transform="translate(55 120)">
+    <rect width="250" height="135" rx="14" class="card"/>
+    <text x="24" y="34" class="label">Estimated logic cells</text>
+    <text x="24" y="84" class="number">2,132</text>
+    <text x="24" y="113" class="foot">pre-place-and-route</text>
+  </g>
+  <g transform="translate(325 120)">
+    <rect width="250" height="135" rx="14" class="card"/>
+    <text x="24" y="34" class="label">Flip-flops</text>
+    <text x="24" y="84" class="number">1,270</text>
+    <text x="24" y="113" class="foot">FDCE + FDPE</text>
+  </g>
+  <g transform="translate(595 120)">
+    <rect width="250" height="135" rx="14" class="card"/>
+    <text x="24" y="34" class="label">Zero-wait CPI</text>
+    <text x="24" y="84" class="number">2.104</text>
+    <text x="24" y="113" class="foot">134 instructions measured</text>
+  </g>
+  <g transform="translate(865 120)">
+    <rect width="280" height="135" rx="14" class="card"/>
+    <text x="24" y="34" class="label">Throughput at 100 MHz</text>
+    <text x="24" y="84" class="number">47.5 MIPS</text>
+    <text x="24" y="113" class="foot">derived; timing closure not claimed</text>
+  </g>
+  <text x="55" y="302" class="heading">LUT primitive distribution</text>
+  <text x="70" y="344" class="barlabel">LUT1</text><rect x="135" y="326" width="6.6" height="24" rx="5" class="bar"/><text x="156.6" y="344" class="barvalue">10</text><text x="70" y="386" class="barlabel">LUT2</text><rect x="135" y="368" width="190.6" height="24" rx="5" class="bar"/><text x="340.6" y="386" class="barvalue">287</text><text x="70" y="428" class="barlabel">LUT3</text><rect x="135" y="410" width="203.2" height="24" rx="5" class="bar"/><text x="353.2" y="428" class="barvalue">306</text><text x="70" y="470" class="barlabel">LUT4</text><rect x="135" y="452" width="287.6" height="24" rx="5" class="bar"/><text x="437.6" y="470" class="barvalue">433</text><text x="70" y="512" class="barlabel">LUT5</text><rect x="135" y="494" width="520.0" height="24" rx="5" class="bar"/><text x="670.0" y="512" class="barvalue">783</text><text x="70" y="554" class="barlabel">LUT6</text><rect x="135" y="536" width="405.1" height="24" rx="5" class="bar"/><text x="555.1" y="554" class="barvalue">610</text>
+  <g transform="translate(785 305)">
+    <rect width="360" height="260" rx="14" class="card"/>
+    <text x="24" y="40" class="heading">Measured workload</text>
+    <text x="24" y="82" class="label">Cycles</text><text x="205" y="82" class="barvalue">282</text>
+    <text x="24" y="116" class="label">Retired instructions</text><text x="205" y="116" class="barvalue">134</text>
+    <text x="24" y="150" class="label">IPC</text><text x="205" y="150" class="barvalue">0.475</text>
+    <text x="24" y="184" class="label">Instruction transfers</text><text x="205" y="184" class="barvalue">136</text>
+    <text x="24" y="218" class="label">Data transfers</text><text x="205" y="218" class="barvalue">15</text>
+  </g>
+  <text x="55" y="625" class="foot">Generic counts and full logs are checked in under reports/oss-cad/. Results describe this RTL snapshot, not final FPGA utilization or fmax.</text>
+</svg>

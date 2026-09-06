@@ -4,13 +4,14 @@ VVP ?= vvp
 VERILATOR ?= verilator
 NODE ?= node
 ARCHIFY_ROOT ?= ../archify-main/archify
+OSS_CAD_ROOT ?= ../oss-cad-suite-build-main/oss-cad-suite
 
 RTL = rtl/rv32i_pkg.sv rtl/rv32i_alu.sv rtl/rv32i_imm_gen.sv \
       rtl/rv32i_regfile.sv rtl/rv32i_decoder.sv rtl/rv32i_core.sv \
       rtl/rv32i_soc.sv
 
 .PHONY: all programs test test-sv test-cocotb test-cocotb-waves lint-verilator \
-	model docs architecture-map architecture-check wave clean
+	model docs architecture-map architecture-check oss-cad-report wave clean
 
 all: test
 
@@ -58,6 +59,9 @@ architecture-check:
 		--quality showcase --json
 	cd "$(ARCHIFY_ROOT)" && "$(NODE)" bin/archify.mjs visual-check \
 		"$(CURDIR)/docs/archify/rv32i-core.architecture.html" --json
+
+oss-cad-report: test-cocotb
+	$(PYTHON) scripts/oss_cad_report.py --suite "$(OSS_CAD_ROOT)"
 
 wave: test-cocotb-waves
 	./scripts/open_wave.sh
