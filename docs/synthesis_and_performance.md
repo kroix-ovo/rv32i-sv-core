@@ -1,6 +1,11 @@
 # Synthesis and performance report
 
-This report records what the current RTL does in simulation and how the core
+> Historical result: this report measures the earlier four-state multicycle
+> core, before the IF/ID/EX/MEM/WB pipeline. Its cycle counts, resource counts,
+> and generated diagram do not describe the current RTL. For the pipeline's
+> routed Vivado results, see [pipeline_vivado_report.md](pipeline_vivado_report.md).
+
+This report records what the earlier RTL did in simulation and how that core
 maps in open-source synthesis. It keeps three questions separate: functional
 correctness, cycle cost under stated memory assumptions, and estimated
 resources before FPGA placement and routing.
@@ -15,7 +20,8 @@ driver reports Yosys 0.68+195; `read_slang` handles the SystemVerilog package,
 imports, enums, and typed ports. Verilator 5.048 and cocotb 2.0.1 produced the
 cycle measurements.
 
-From the repository root:
+To reproduce these historical numbers, check out `be38a81` (the multicycle
+revision) and run from that repository root:
 
 ```bash
 make oss-cad-report PYTHON=.venv/bin/python
@@ -96,6 +102,5 @@ the CPU estimate.
 - The directed workload is a functional coverage program, not CoreMark,
   Dhrystone, Embench, or an application benchmark.
 
-The next FPGA evidence step is to run `scripts/vivado_build.tcl`, archive the
-utilization and timing summaries, and compare the post-route result with this
-open-source pre-route baseline.
+The pipeline's later FPGA evidence is recorded in
+[pipeline_vivado_report.md](pipeline_vivado_report.md).

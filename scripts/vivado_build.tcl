@@ -5,8 +5,10 @@
 set script_dir [file dirname [file normalize [info script]]]
 set repo_dir [file dirname $script_dir]
 set build_dir [file join $repo_dir build vivado]
+set report_dir [file join $repo_dir reports]
 
 file mkdir $build_dir
+file mkdir $report_dir
 create_project -force rv32i_arty_a7 $build_dir -part xc7a100tcsg324-1
 
 set rtl_files [list \
@@ -29,14 +31,30 @@ update_compile_order -fileset sources_1
 launch_runs synth_1 -jobs 4
 wait_on_run synth_1
 open_run synth_1
-report_utilization -file [file join $repo_dir reports post_synth_utilization.rpt]
-report_timing_summary -file [file join $repo_dir reports post_synth_timing.rpt]
+report_utilization -file [file join $report_dir post_synth_utilization.rpt]
+report_timing_summary -file [file join $report_dir post_synth_timing.rpt]
 
 launch_runs impl_1 -to_step write_bitstream -jobs 4
 wait_on_run impl_1
 open_run impl_1
-report_utilization -file [file join $repo_dir reports post_route_utilization.rpt]
-report_timing_summary -file [file join $repo_dir reports post_route_timing.rpt]
+report_utilization -file [file join $report_dir post_route_utilization.rpt]
+report_timing_summary -file [file join $report_dir post_route_timing.rpt]
 
-puts "Bitstream: [file join $build_dir rv32i_arty_a7.runs impl_1 arty_a7_100t_top.bit]"
-
+# A successful bitstream write does not mean the 100 MHz clock met timing.
+# Read the routed report and fail the batch command when setup slack is less
+# than zero. The report remains available for diagnosis in either case.
+set timing_file [open [file join $report_dir post_route_timing.rpt] r]
+set timing_text [read $timing_file]
+close $timing_file
+if {![regexp {WNS\(ns\)[^\n]*\n[^\n]*\n[ \t]*(-?[0-9]+\.[0-9]+)[ \t]+} $timing_text -> wns]} {
+  error "Could not read routed WNS from post_route_timing.rpt"
+}
+set bitstream [file join $build_dir rv32i_arty_a7.runs impl_1 arty_a7_100t_top.bit]
+if {![file exists $bitstream]} {
+  error "Bitstream was not written: $bitstream"
+}
+puts "Routed WNS: $wns ns"
+if {$wns < 0} {
+  error "100 MHz setup timing failed; inspect post_route_timing.rpt"
+}
+puts "Bitstream: $bitstream"

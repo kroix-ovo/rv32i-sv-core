@@ -3,6 +3,9 @@
 // Store the 32 RV32I integer registers with two combinational read ports and one
 // synchronous write port. Architectural register x0 is protected on both reads
 // and writes; reset clearing keeps simulation waveforms deterministic.
+// ID sees the stored values through the read ports. WB changes one register
+// on a rising edge. The core stalls ID while it waits for an older writer,
+// so a dependent instruction reads the value after that write edge.
 
 module rv32i_regfile (
   // Clock/reset, two source-register reads, and one destination-register write.

@@ -1,4 +1,4 @@
-"""Build and run the cocotb CPU regression with Verilator.
+"""Build and run the cocotb CPU regression with Verilator or Icarus.
 
 The runner keeps simulator details out of the tests and places every generated
 artifact under ``sim/build/cocotb``. ``--waves`` enables Verilator FST tracing;
@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import os
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 from cocotb_tools.runner import get_runner
 
@@ -28,7 +29,9 @@ SOURCES = [
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--waves", action="store_true", help="write dump.fst")
+    parser.add_argument("--waves", action="store_true", help="write dump.fst with Verilator")
+    parser.add_argument("--simulator", choices=("verilator", "icarus"),
+                        default="verilator")
     parser.add_argument(
         "--testcase",
         action="append",
@@ -40,14 +43,12 @@ def main() -> None:
     os.environ.setdefault("LANG", "C")
     os.environ.setdefault("LC_ALL", "C")
 
-    runner = get_runner("verilator")
-    build_args = [
-        "-Wall",
-        "-Wno-fatal",
-        "--trace-structs",
-        "-CFLAGS",
-        "-std=c++17",
-    ]
+    if args.waves and args.simulator != "verilator":
+        parser.error("--waves requires Verilator")
+    runner = get_runner(args.simulator)
+    build_args = (["-Wall", "-Wno-fatal", "--trace-structs",
+                   "-CFLAGS", "-std=c++17"] if args.simulator == "verilator"
+                  else ["-g2012"])
     if args.waves:
         build_args.append("--trace-fst")
 
@@ -69,6 +70,10 @@ def main() -> None:
         test_args=["--trace-file", str(BUILD / "dump.fst")] if args.waves else [],
         results_xml=BUILD / "results.xml",
     )
+    results = ET.parse(BUILD / "results.xml").getroot()
+    failures = results.findall(".//failure") + results.findall(".//error")
+    if failures:
+        raise SystemExit(f"{len(failures)} cocotb test failure(s)")
 
     if args.waves:
         print(f"Waveform: {BUILD / 'dump.fst'}")

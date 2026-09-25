@@ -3,6 +3,8 @@
 // Execute RV32I arithmetic, logical, shift, and comparison operations. The
 // module is purely combinational; signed casts are confined to SLT and SRA so
 // the remaining operations preserve the input bit patterns.
+// always_comb is a circuit description: changing an input changes result_o
+// without waiting for a clock. The pipeline captures that result in EX/MEM.
 
 module rv32i_alu (
   // Selected datapath operands and decoded operation.

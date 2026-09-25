@@ -3,6 +3,8 @@
 // Reconstruct the I, S, B, U, and J immediate layouts defined by the RV32I ISA.
 // Branch and jump outputs include their implicit low zero bit and are therefore
 // byte offsets ready for the next-PC adder.
+// Sign extension copies instruction bit 31 into the new high bits. For
+// example, a negative 12-bit ADDI offset becomes a negative 32-bit value.
 
 /* verilator lint_off UNUSEDSIGNAL */
 module rv32i_imm_gen (

@@ -19,24 +19,29 @@ module rv32i_core_assertions (
   input logic [3:0]  dmem_wstrb_i,
   input logic        trap_valid_i
 );
-  default clocking monitor_clock @(posedge clk_i); endclocking
-  default disable iff (!rst_ni);
-
+  // Vivado xsim 2023.2 does not accept a default disable declaration, so
+  // each property names its clock and reset guard explicitly.
   property p_instruction_request_stable;
-    imem_valid_i && !imem_ready_i |=> imem_valid_i && $stable(imem_addr_i);
+    @(posedge clk_i) disable iff (!rst_ni)
+      imem_valid_i && !imem_ready_i |=> imem_valid_i && $stable(imem_addr_i);
   endproperty
   assert property (p_instruction_request_stable);
 
   property p_data_request_stable;
-    dmem_valid_i && !dmem_ready_i |=> dmem_valid_i &&
+    @(posedge clk_i) disable iff (!rst_ni)
+      dmem_valid_i && !dmem_ready_i |=> dmem_valid_i &&
       $stable({dmem_write_i, dmem_addr_i, dmem_wdata_i, dmem_wstrb_i});
   endproperty
   assert property (p_data_request_stable);
 
-  assert property (imem_valid_i |-> (imem_addr_i[1:0] == 2'b00));
-  assert property (!(imem_valid_i && dmem_valid_i));
-  assert property (dmem_write_i |-> (|dmem_wstrb_i));
-  assert property (trap_valid_i |=> trap_valid_i);
+  assert property (@(posedge clk_i) disable iff (!rst_ni)
+    imem_valid_i |-> (imem_addr_i[1:0] == 2'b00));
+  assert property (@(posedge clk_i) disable iff (!rst_ni)
+    !(imem_valid_i && dmem_valid_i));
+  assert property (@(posedge clk_i) disable iff (!rst_ni)
+    dmem_write_i |-> (|dmem_wstrb_i));
+  assert property (@(posedge clk_i) disable iff (!rst_ni)
+    trap_valid_i |=> trap_valid_i);
 endmodule
 
 // Binding keeps verification code outside the synthesizable core. Every core

@@ -3,6 +3,10 @@
 // Decode one 32-bit instruction into datapath, memory, writeback, and control-
 // transfer signals. Reserved encodings keep valid_o low so the core reports a
 // deterministic illegal-instruction trap.
+// This is combinational logic. It does not advance an instruction by itself;
+// the core samples these outputs into ID/EX only when ID is allowed to issue.
+// The defaults at the start of always_comb avoid latches and keep an unknown
+// opcode from requesting a register or memory write.
 
 module rv32i_decoder (
   // Instruction input and decoded execution controls.

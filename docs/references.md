@@ -18,12 +18,6 @@ The ISA behavior comes from the RISC-V specification. Open cores were used to st
 
 ## Verification and waveform tools
 
-- [OSS CAD Suite](https://github.com/YosysHQ/oss-cad-suite-build). The
-  2026-09-05 macOS ARM64 bundle supplies the Yosys, ABC, Slang, and Xilinx
-  technology-library flow used for the checked-in synthesis report.
-- [Yosys documentation](https://yosyshq.readthedocs.io/projects/yosys/en/latest/).
-  The report uses generic `synth` and Xilinx 7-series `synth_xilinx` passes;
-  their results are pre-place-and-route estimates.
 - [cocotb simulator support](https://docs.cocotb.org/en/stable/simulator_support.html). This documents Verilator support and FST waveform generation with `--trace-fst` and `--trace-structs`.
 - [cocotb Python runner reference](https://docs.cocotb.org/en/stable/library_reference.html#python-runner). The checked-in runner uses this build/test interface and enables waves at both stages.
 - [Verilator user guide](https://verilator.org/guide/latest/). Verilator provides SystemVerilog elaboration, lint diagnostics, and the compiled cocotb simulation harness.
@@ -32,10 +26,6 @@ The ISA behavior comes from the RISC-V specification. Open cores were used to st
 ## Architecture presentation
 
 - [Archify](https://github.com/tt-a1i/archify). Archify 2.16.0 renders the checked-in typed JSON specification as the interactive architecture map. Its showcase validator is also used to check crossings, route clarity, label clearance, and desktop readability. The CPU topology, signal names, guided views, and explanatory cards remain project-authored and are derived from this repository's RTL.
-- [Microsoft architecture diagram guidance](https://learn.microsoft.com/en-us/azure/well-architected/architect-role/design-diagrams).
-  Its recommendations for directional arrows, explicit relationship labels,
-  consistent line semantics, compact legends, and layered detail inform the
-  engineering-report presentation of the generated implementation sheet.
 
 ## Next verification references
 

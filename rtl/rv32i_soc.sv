@@ -3,6 +3,9 @@
 // Couple rv32i_core to a shared synchronous memory and one byte-writable GPIO
 // register. The CPU retains separate instruction and data ports while both map
 // into the same little-endian word array. MEM_INIT_FILE uses $readmemh format.
+// A request sampled on one rising edge produces ready and data for the next
+// edge. The core must keep its request stable until it sees that ready. Byte
+// strobes let a store change one or two bytes without changing nearby bytes.
 
 module rv32i_soc #(
   parameter integer      MEM_WORDS     = 4096,
@@ -41,12 +44,16 @@ module rv32i_soc #(
   logic        dmem_ready;
   logic [31:0] dmem_rdata;
   logic        dmem_error;
+  logic [31:0] ram_dmem_rdata_q;
+  logic [31:0] gpio_rdata_q;
+  logic        dmem_gpio_response_q;
 
   logic [31:0] trap_tval_unused;
   logic [31:0] retire_pc_unused;
   logic [31:0] retire_instruction_unused;
   logic [1:0]  debug_state_unused;
-  integer byte_index;
+  integer gpio_byte_index;
+  integer ram_byte_index;
 
   // Simulation and FPGA tools consume the same word-oriented program image.
   initial begin
@@ -83,15 +90,49 @@ module rv32i_soc #(
     .debug_state_o        (debug_state_unused)
   );
 
-  // The ready registers create a one-cycle response and a one-cycle pulse.
-  // Range checks become access-fault inputs to the CPU instead of wrapping.
+  // The two clocked blocks below describe two physical RAM ports. Port A
+  // reads instructions. Port B reads data and writes selected byte lanes.
+  // Neither port has an asynchronous reset: block RAM cannot reset all its
+  // stored words at once. The program image initializes those words, and the
+  // core looks at read data only when the matching ready pulse is high.
+  // Keeping each read output directly registered follows Vivado's block-RAM
+  // inference pattern and avoids a large distributed-RAM implementation.
+  always_ff @(posedge clk_i) begin
+    if (imem_valid && !imem_ready &&
+        (imem_addr < MEM_BYTES) && (imem_addr[1:0] == 2'b00))
+      imem_rdata <= memory[imem_addr[MEM_ADDR_W+1:2]];
+  end
+
+  always_ff @(posedge clk_i) begin
+    if (dmem_valid && !dmem_ready && (dmem_addr < MEM_BYTES)) begin
+      if (dmem_write) begin
+        for (ram_byte_index = 0; ram_byte_index < 4;
+             ram_byte_index = ram_byte_index + 1)
+          if (dmem_wstrb[ram_byte_index])
+            memory[dmem_addr[MEM_ADDR_W+1:2]][ram_byte_index*8 +: 8]
+              <= dmem_wdata[ram_byte_index*8 +: 8];
+      end
+      ram_dmem_rdata_q <= memory[dmem_addr[MEM_ADDR_W+1:2]];
+    end
+  end
+
+  // GPIO is outside RAM. Capture its read value at the request edge, then
+  // select it during the same ready cycle used by normal data-memory reads.
+  always_ff @(posedge clk_i) begin
+    if (dmem_valid && !dmem_ready) begin
+      dmem_gpio_response_q <= (dmem_addr == GPIO_ADDR);
+      gpio_rdata_q <= gpio_o;
+    end
+  end
+  assign dmem_rdata = dmem_gpio_response_q ? gpio_rdata_q : ram_dmem_rdata_q;
+
+  // Only control/status registers reset. They say when the registered data
+  // above is meaningful and turn out-of-range accesses into bus faults.
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       imem_ready <= 1'b0;
-      imem_rdata <= 32'b0;
       imem_error <= 1'b0;
       dmem_ready <= 1'b0;
-      dmem_rdata <= 32'b0;
       dmem_error <= 1'b0;
       gpio_o     <= 32'b0;
     end else begin
@@ -102,10 +143,7 @@ module rv32i_soc #(
 
       if (imem_valid && !imem_ready) begin
         imem_ready <= 1'b1;
-        if ((imem_addr < MEM_BYTES) && (imem_addr[1:0] == 2'b00)) begin
-          imem_rdata <= memory[imem_addr[MEM_ADDR_W+1:2]];
-        end else begin
-          imem_rdata <= 32'b0;
+        if ((imem_addr >= MEM_BYTES) || (imem_addr[1:0] != 2'b00)) begin
           imem_error <= 1'b1;
         end
       end
@@ -114,22 +152,14 @@ module rv32i_soc #(
         dmem_ready <= 1'b1;
 
         if (dmem_addr == GPIO_ADDR) begin
-          dmem_rdata <= gpio_o;
           if (dmem_write) begin
-            for (byte_index = 0; byte_index < 4; byte_index = byte_index + 1)
-              if (dmem_wstrb[byte_index])
-                gpio_o[byte_index*8 +: 8] <= dmem_wdata[byte_index*8 +: 8];
+            for (gpio_byte_index = 0; gpio_byte_index < 4;
+                 gpio_byte_index = gpio_byte_index + 1)
+              if (dmem_wstrb[gpio_byte_index])
+                gpio_o[gpio_byte_index*8 +: 8]
+                  <= dmem_wdata[gpio_byte_index*8 +: 8];
           end
-        end else if (dmem_addr < MEM_BYTES) begin
-          dmem_rdata <= memory[dmem_addr[MEM_ADDR_W+1:2]];
-          if (dmem_write) begin
-            for (byte_index = 0; byte_index < 4; byte_index = byte_index + 1)
-              if (dmem_wstrb[byte_index])
-                memory[dmem_addr[MEM_ADDR_W+1:2]][byte_index*8 +: 8]
-                  <= dmem_wdata[byte_index*8 +: 8];
-          end
-        end else begin
-          dmem_rdata <= 32'b0;
+        end else if (dmem_addr >= MEM_BYTES) begin
           dmem_error <= 1'b1;
         end
       end

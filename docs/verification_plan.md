@@ -24,7 +24,7 @@ A passing run stores `0x600d600d` at address `0x900`. A failed comparison stores
 
 `tb/tb_core_traps.sv` checks illegal instructions, `ECALL`, `EBREAK`, misaligned jump/load/store addresses, and instruction/load/store access faults. It checks cause, faulting PC, tval, and sticky trap behavior.
 
-## cocotb and Verilator integration
+## Transaction-level pipeline checks
 
 `tb/cocotb/test_rv32i_core.py` drives the synthesizable core through its native
 instruction and data ready/valid ports. A seeded memory agent inserts zero to
@@ -32,24 +32,27 @@ three wait cycles, checks every held request remains stable, and services
 little-endian writes using the RTL byte strobes.
 
 The directed cocotb test compares every retirement PC and instruction against
-`python/rv32i_model.py`. A second test measures the same workload with no
-inserted memory waits. A third independently checks the illegal-instruction
-cause, PC, tval, state, and sticky behavior. Run:
+`python/rv32i_model.py`. A second test checks the illegal-instruction trap.
+A third scenario checks independent instruction overlap, RAW stalls, a
+load-use dependency, branch redirection, and ordered retirement. The driver,
+request monitor, reference scoreboard, and event coverage follow basic UVM
+verification roles without depending on a SystemVerilog UVM library. Run:
 
 ```bash
 make test-cocotb PYTHON=.venv/bin/python
 make test-cocotb-waves PYTHON=.venv/bin/python
 ```
 
+On Windows with Icarus available:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_cocotb.py --simulator icarus
+```
+
 The waveform run writes `sim/build/cocotb/dump.fst`. Use
 `waves/rv32i_core.gtkw` or `scripts/open_wave.sh` to inspect the controller,
 retirement stream, memory handshakes, and traps. GTKWave supports diagnosis; it
 does not replace the self-checking scoreboards.
-
-The two workload tests record cycles, retirements, CPI, IPC, transaction
-counts, and inserted wait cycles. `make oss-cad-report` combines those
-measurements with generic and Xilinx 7-series Yosys synthesis; see
-[synthesis_and_performance.md](synthesis_and_performance.md).
 
 ## Protocol assertions
 
@@ -73,10 +76,8 @@ Before treating the core as production-ready, add the official RISC-V Architectu
 | Trap test | Nine expected trap records |
 | Verilator lint | Successful elaboration with reviewed diagnostics |
 | cocotb directed test | Pass signature, no trap, matching retirement stream, observed wait states |
-| cocotb performance test | Pass signature; 134 retirements; metrics file written |
 | cocotb trap test | Illegal-instruction record is correct and remains sticky |
-| OSS CAD generic synthesis | Successful Slang elaboration; Yosys `check` reports zero problems |
-| OSS CAD XC7 mapping | Successful core-only Xilinx 7-series technology estimate |
+| cocotb pipeline test | Ordered retirement, taken-branch target, memory result, stage overlap, RAW and memory stalls |
 | Vivado synthesis | No critical warnings about inferred latches, multiple drivers, or unconstrained ports |
 | Vivado timing | Worst negative slack is nonnegative for the 10 ns board clock |
 | FPGA demo | Heartbeat LED changes, software LED blinks, trap LED stays off |

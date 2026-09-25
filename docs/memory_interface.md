@@ -1,6 +1,6 @@
 # Memory interface
 
-The core has one instruction request port and one data request port. Each uses the same valid/ready rule. The ports are separate so a future system can connect Harvard memories, caches, or two bus adapters. This multicycle core never asserts both request ports at the same time.
+The core has one instruction request port and one data request port. Each uses the same valid/ready rule. The ports are separate so a future system can connect Harvard memories, caches, or two bus adapters. The baseline pipeline serializes memory operations with fetch and never asserts both request ports at the same time.
 
 ## Request rule
 
@@ -44,5 +44,4 @@ For data reads, the memory should use `dmem_addr_o[31:2]` to select the word. Th
 
 ## FENCE behavior
 
-There is no request queue, cache, or write buffer. A new instruction cannot execute until the current data transfer completes. All earlier memory operations are therefore complete when `FENCE` reaches execute. The decoder accepts `FENCE`, and the core retires it without another hardware action.
-
+There is no request queue, cache, or write buffer. A data transfer holds younger stages until it completes. Fetch also pauses while `FENCE` is in the pipeline, so all earlier memory operations complete before `FENCE` retires. It requires no additional hardware action.
