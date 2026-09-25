@@ -46,3 +46,19 @@ Fresh results:
 - cocotb directed program with deterministic wait states: pass
 - cocotb illegal-instruction sticky trap: pass
 - FST trace: 5.11 us, successfully loaded by GTKWave
+
+## 2026-09-25 pipeline revision
+
+The core changed to an in-order IF/ID/EX/MEM/WB pipeline. Stage valid bits
+mark bubbles, ID waits on RAW dependencies, data-memory waits hold younger
+work, and branches resolve in EX. The earlier multicycle results above remain
+dated history; they are not measurements of this revision.
+
+Slang elaborated the pipeline with zero errors and warnings. Icarus passed
+the ALU, directed-program (521 cycles), and nine-trap suites. Three cocotb
+tests passed with a memory driver, request monitors, reference scoreboard,
+and pipeline coverage. Vivado 2023.2 XSim passed the three directed benches.
+The Arty A7-100T post-route run reported +0.681 ns setup WNS at a 10 ns
+clock target, 1,631 LUTs, 1,560 registers, and 4 RAMB36 blocks. The board
+has not been programmed or observed; see `pipeline_vivado_report.md` for
+the 26 DRC warnings.

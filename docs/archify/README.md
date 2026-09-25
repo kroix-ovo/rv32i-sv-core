@@ -1,19 +1,20 @@
 # Interactive RV32I architecture map
 
-`rv32i-core.architecture.json` is the source-of-truth diagram specification.
-It describes the checked-in multicycle RTL rather than an idealized or pipelined
-RISC-V implementation. `rv32i-core.architecture.html` is a self-contained
-Archify viewer generated from that specification.
+`rv32i-core.architecture.json` is the diagram specification. It describes the
+checked-in five-stage pipeline. `rv32i-core.architecture.html` is a
+self-contained interactive viewer with the same current labels and notes.
+The stage diagram in `../diagrams/core_datapath.svg` shows the interstage
+registers more directly; this map groups the datapath into functional blocks.
 
 The map provides three guided views:
 
 - instruction fetch, decode, execute, writeback, and retirement;
 - load effective-address, request, return, alignment, and writeback flow;
-- controller ownership and externally visible trap/retirement behavior.
+- pipeline interlocks and externally visible trap/retirement behavior.
 
-It also records the architectural boundary, ready/valid invariants, and the
-scope of the completed simulation evidence. Simulation results do not claim
-FPGA timing closure.
+It also records the architectural boundary, ready/valid invariants, and
+Vivado implementation evidence. The reported timing is post-route; the
+physical board has not been tested.
 
 ## Rebuild and check
 
@@ -28,8 +29,9 @@ make architecture-check
 
 `architecture-map` performs Archify's showcase validation before writing the
 self-contained HTML. `architecture-check` repeats specification validation and
-runs the automated Chrome viewport/readability check. The checked-in PNGs,
-JSON receipt, and contact sheet are evidence from that visual check.
+runs the automated Chrome viewport/readability check. The earlier multicycle
+screenshots and visual-check receipt were removed; no new Archify visual-check
+receipt is claimed for this pipeline map.
 
 ## Attribution
 

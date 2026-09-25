@@ -50,7 +50,7 @@ On Windows with Icarus available:
 ```
 
 The waveform run writes `sim/build/cocotb/dump.fst`. Use
-`waves/rv32i_core.gtkw` or `scripts/open_wave.sh` to inspect the controller,
+`waves/rv32i_core.gtkw` or `scripts/open_wave.sh` to inspect stage valid bits,
 retirement stream, memory handshakes, and traps. GTKWave supports diagnosis; it
 does not replace the self-checking scoreboards.
 

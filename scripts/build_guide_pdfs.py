@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from shutil import copyfile
 
 from reportlab.graphics import renderPDF
 from reportlab.lib import colors
@@ -229,270 +230,113 @@ def document(path: Path, title: str) -> SimpleDocTemplate:
 
 
 def build_architecture() -> Path:
+    """Build the current pipeline guide from the checked-in RTL contract."""
     path = OUTPUT / "architecture.pdf"
     story: list[Flowable] = [
-        Spacer(1, 0.22 * inch),
-        Paragraph("RV32I core architecture", TITLE),
-        Paragraph(
-            "A readable guide to the multicycle controller, datapath, memory ports, and trap boundary",
-            SUBTITLE,
-        ),
-        *figure(DIAGRAMS / "core_datapath.svg", "Figure 1. Main datapath and control paths.", 3.95 * inch),
+        Spacer(1, 0.18 * inch),
+        Paragraph("RV32I five-stage pipeline", TITLE),
+        Paragraph("IF, ID, EX, MEM, WB: instruction flow, stalls, traps, and FPGA evidence", SUBTITLE),
+        *figure(DIAGRAMS / "core_datapath.svg", "Figure 1. The valid bits mark occupied stage registers; adjacent instructions may overlap.", 3.8 * inch),
         Paragraph("Design scope", H1),
-        Paragraph(
-            "This core implements the complete unprivileged RV32I base instruction set. It has separate instruction and data memory ports, a 32-register file, alignment checks, and a sticky external trap record. It does not implement compressed instructions, multiplication, privileged CSRs, interrupts, caches, or an MMU.",
-            BODY,
-        ),
-        Paragraph(
-            "The design favors readable behavior over peak throughput. Each instruction completes before the next one begins, so there are no pipeline hazards to hide the basic movement of data.",
-            CALLOUT,
-        ),
-        Paragraph(
-            "The diagrams are original to this repository and trace the checked-in RTL. The instruction-format notation follows the official RISC-V RV32I specification; Ibex is cited as a reference for verification-minded open-core documentation, not as copied RTL.",
-            SMALL,
-        ),
+        Paragraph("The core implements unprivileged RV32I with separate ready/valid instruction and data ports. It has 32 integer registers, little-endian byte lanes, alignment checks, and a sticky external trap record. It has no forwarding, caches, privileged CSRs, interrupts, MMU, compressed instructions, or multiply/divide extension.", BODY),
+        Paragraph("Pipeline registers hold an instruction's PC, data, and control decisions. A valid bit of zero marks a bubble: the nearby data bits are ignored. Unlike the earlier multicycle design, several different instructions can occupy the pipeline at once.", CALLOUT),
         PageBreak(),
-        Paragraph("Why the core is multicycle", H1),
-        Paragraph(
-            "A single-cycle CPU asks one clock period to cover instruction memory, decode, register reads, the ALU, data memory, and writeback. That drawing is useful in an introductory lesson, but it assumes combinational memories and creates a long timing path.",
-            BODY,
-        ),
-        Paragraph(
-            "This core separates the work into states. The state machine is small enough to understand without pipeline hazards, and the memory ports can wait for a real response.",
-            BODY,
-        ),
-        *figure(DIAGRAMS / "control_fsm.svg", "Figure 2. Four-state control machine.", 3.55 * inch),
-        Paragraph("Ordinary instruction sequence", H2),
-        bullet(f"{code('FETCH')} holds {code('imem_valid_o')} and the PC until instruction memory raises {code('imem_ready_i')}."),
-        bullet(f"{code('EXECUTE')} decodes the saved instruction, reads registers, computes the result, and chooses the next PC."),
-        bullet(f"{code('MEMORY')} is used only by a load or store and waits for {code('dmem_ready_i')}."),
-        bullet(f"{code('TRAP')} holds the fault record until reset."),
+        Paragraph("What each stage does", H1),
+        make_table([
+            ["Stage", "Work", "Result"],
+            ["IF", "Hold imem_valid_o and fetch_pc_q until imem_ready_i.", "Instruction and PC enter IF/ID."],
+            ["ID", "Decode, form the immediate, and read source registers.", "Operands and controls enter ID/EX when dependencies clear."],
+            ["EX", "Run ALU and branch comparison; form data address.", "Result or memory request enters EX/MEM."],
+            ["MEM", "Hold a load/store request until dmem_ready_i; align load data.", "Result enters MEM/WB."],
+            ["WB", "Write rd when legal, then pulse retirement.", "Architectural register state changes."],
+        ], [0.6 * inch, 3.15 * inch, 2.65 * inch]),
+        Spacer(1, 12),
+        *figure(DIAGRAMS / "control_fsm.svg", "Figure 2. Pipeline flow, interlocks, and fault handling. This is not a state machine.", 2.9 * inch),
+        Paragraph("Reading the SystemVerilog", H2),
+        Paragraph("The suffix _q means a clocked value. always_comb describes logic that responds within a cycle. always_ff updates registers on a clock edge. A nonblocking assignment (<=) reads the old values for that edge, so neighboring instructions can advance together.", BODY),
         PageBreak(),
-        Paragraph("Datapath blocks", H1),
-        Paragraph("Program counter and instruction register", H2),
-        Paragraph(
-            f"The program counter is a byte address. Because the compressed extension is absent, every instruction is four bytes and legal instruction addresses satisfy {code('pc[1:0] == 2\'b00')}. The fetched instruction stays in a register while decode and execution finish.",
-            BODY,
-        ),
-        Paragraph("Decoder and immediate generator", H2),
-        Paragraph(
-            f"The decoder checks the opcode, {code('funct3')}, and {code('funct7')} fields. Reserved encodings become illegal-instruction traps. The immediate generator reconstructs I, S, B, U, and J layouts. Branch and jump outputs already contain their low zero bit, so they are ready to add to the PC.",
-            BODY,
-        ),
-        Paragraph("Register file", H2),
-        Paragraph(
-            "Two combinational read ports supply the usual two source operands. One clocked write port records the result. Register x0 is protected twice: reads return zero explicitly, and sequential logic forces its stored value to zero.",
-            BODY,
-        ),
-        Paragraph("ALU and branch comparison", H2),
-        Paragraph(
-            "The ALU performs addition, subtraction, shifts, bitwise logic, and signed or unsigned set-less-than operations. The nearby branch comparator uses signed or unsigned interpretation according to the branch instruction.",
-            BODY,
-        ),
-        Paragraph("Writeback", H2),
-        Paragraph(
-            f"The writeback path selects an ALU result, a completed load, or {code('PC + 4')} for a jump link. A faulting instruction never writes its destination register.",
-            BODY,
-        ),
-        Spacer(1, 8),
-        *figure(DIAGRAMS / "instruction_formats.svg", "Figure 3. Field placement in the six RV32I instruction formats.", 2.55 * inch),
+        Paragraph("Hazards and control flow", H1),
+        Paragraph("There is no bypass network. If an instruction in ID reads a register that an older instruction will write, ID waits. A bubble moves forward until the older instruction writes in WB. For example, ADDI x1,x0,7 followed by ADD x2,x1,x1 waits for x1; the ADD then reads 7 and produces 14.", BODY),
+        Paragraph("A waiting data request holds EX/MEM and younger stages. WB can still retire an older instruction once. Fetch pauses for an unresolved branch or jump, a memory operation, FENCE, or a fault. A branch or jump resolves in EX and supplies the next fetch PC. This simple policy limits throughput below one instruction per cycle.", BODY),
+        Paragraph("Instruction and data handshakes", H2),
+        Paragraph("A request is valid while its address and controls stay stable. The matching ready input completes it. The core permits one outstanding request and pauses fetch during data-memory work. No request queue, write buffer, or cache changes the ordering.", BODY),
+        Paragraph("Faults and retirement", H2),
+        Paragraph("A memory-stage fault has priority over an execute-stage fault, which has priority over a fetch fault. The faulting instruction does not retire or write rd. Younger work is discarded; older work retires before trap_valid_o becomes sticky. trap_cause_o, trap_pc_o, and trap_tval_o report the fault until reset.", BODY),
+        Paragraph("debug_state_o is a status summary: 0 means flowing, 1 interlock or serialization, 2 memory wait, and 3 trapped. It is not a pipeline stage number.", CALLOUT),
         PageBreak(),
-        Paragraph("Control transfers", H1),
-        Paragraph(
-            f"{code('JAL')} adds a J-type immediate to the current PC. {code('JALR')} adds an I-type immediate to rs1, then clears target bit 0 as required by the ISA. Bit 1 is still checked because this core requires four-byte instruction alignment.",
-            BODY,
-        ),
-        Paragraph(
-            f"A taken branch checks its target alignment. A branch that is not taken does not trap because its target is not used. A faulting {code('JAL')} or {code('JALR')} does not write its link register.",
-            BODY,
-        ),
-        Paragraph("Loads and stores", H1),
-        Paragraph(
-            "Data addresses are byte addresses. Misaligned halfword and word accesses trap instead of being split into several transfers.",
-            BODY,
-        ),
-        make_table(
-            [
-                ["Access", "Address bits", "Write strobe"],
-                ["SB", "00, 01, 10, or 11", "0001, 0010, 0100, or 1000"],
-                ["SH", "00 or 10", "0011 or 1100"],
-                ["SW", "00", "1111"],
-            ],
-            [0.9 * inch, 2.05 * inch, 3.45 * inch],
-        ),
-        Spacer(1, 8),
-        Paragraph(
-            "Memory returns the aligned 32-bit word containing the requested bytes. The load-align block shifts the chosen byte or halfword into the low bits, then sign extends LB and LH or zero extends LBU and LHU.",
-            BODY,
-        ),
-        Paragraph("Memory handshake", H2),
-        Paragraph(
-            f"The core raises {code('valid')} and keeps the address and controls stable. Memory completes the request by raising {code('ready')}. Read data and the error flag are sampled only when both signals are high. Any number of wait cycles is allowed, but the core permits only one outstanding request.",
-            BODY,
-        ),
-        Paragraph(
-            f"Because no request queue, cache, or write buffer exists, every earlier memory operation has completed when {code('FENCE')} executes. The core therefore retires {code('FENCE')} without another hardware action.",
-            CALLOUT,
-        ),
-        PageBreak(),
-        Paragraph("Traps", H1),
-        Paragraph(
-            "This repository does not implement the privileged architecture. A trap stops the state machine instead of redirecting the PC to a machine-mode handler.",
-            BODY,
-        ),
-        make_table(
-            [
-                ["Output", "Meaning"],
-                ["trap_valid_o", "Sticky high until reset"],
-                ["trap_cause_o", "Standard exception number"],
-                ["trap_pc_o", "Faulting instruction or failed fetch address"],
-                ["trap_tval_o", "Bad instruction word or faulting address when useful"],
-            ],
-            [1.7 * inch, 4.7 * inch],
-        ),
+        Paragraph("Data operations and integration", H1),
+        Paragraph("The decoder checks opcode, funct3, and funct7. The immediate generator reconstructs I, S, B, U, and J layouts. The ALU handles arithmetic, logic, shifts, and signed or unsigned comparisons. Instruction addresses must be four-byte aligned; misaligned halfword or word data accesses trap.", BODY),
+        make_table([
+            ["Access", "Legal low address bits", "Write strobe"],
+            ["SB", "00, 01, 10, 11", "0001, 0010, 0100, 1000"],
+            ["SH", "00 or 10", "0011 or 1100"],
+            ["SW", "00", "1111"],
+        ], [0.85 * inch, 2.3 * inch, 3.25 * inch]),
         Spacer(1, 10),
-        Paragraph("Reset and retirement", H1),
-        Paragraph(
-            f"{code('rst_ni')} is asynchronous and active low. Reset clears the register file, trap record, and request state, then loads the {code('RESET_PC')} parameter.",
-            BODY,
-        ),
-        Paragraph(
-            f"{code('retire_valid_o')} pulses when an instruction completes without a trap. {code('retire_pc_o')} and {code('retire_instruction_o')} identify that instruction. These are waveform and scoreboard signals, not the full RISC-V Formal Interface.",
-            BODY,
-        ),
-        Paragraph("Integration limits", H1),
-        bullet("No machine-mode CSRs, trap vector, interrupts, or MRET."),
-        bullet("No M, C, A, Zicsr, or Zifencei extensions."),
-        bullet("Misaligned data is trapped rather than repaired in hardware."),
-        bullet("The native memory ports need a wrapper before connection to AXI or Wishbone."),
+        Paragraph("Loads select a byte or halfword from the returned aligned word. LB and LH sign extend; LBU and LHU fill upper bits with zeros. JAL and JALR write PC + 4 when they complete successfully. JALR clears target bit 0, and the four-byte alignment check still applies.", BODY),
+        Paragraph("The SoC wrapper uses two clocked ports of a shared memory array so Vivado can infer block RAM. The FPGA top targets the Arty A7-100T. The bitstream was generated, but board execution has not been observed.", BODY),
+        *figure(DIAGRAMS / "instruction_formats.svg", "Figure 3. RV32I instruction fields. Immediate bits are reassembled by the immediate generator.", 2.35 * inch),
         PageBreak(),
-        Paragraph("Verification architecture", H1),
-        Paragraph(
-            "Verification is layered so a decoder, protocol, integration, or architectural failure has an independent observation point. The cocotb driver never reaches into register-file storage; it drives the native ports, injects deterministic wait states, and compares retirement events against the Python ISA model.",
-            BODY,
-        ),
-        *figure(DIAGRAMS / "verification_stack.svg", "Figure 4. Source-grounded verification and waveform flow.", 3.85 * inch),
-        make_table(
-            [
-                ["Gate", "Fresh local result", "What it establishes"],
-                ["Verilator 5.048 lint", "Pass", "RTL elaborates; diagnostics reviewed"],
-                ["cocotb 2.0.1 + Verilator", "2/2 pass", "Wait states, retirement scoreboard, sticky illegal trap"],
-                ["Directed SystemVerilog", "3 suites pass", "10 ALU cases, full program signature, 9 trap records"],
-                ["Python ISA model", "134 retired", "Independent architectural result reaches pass signature"],
-            ],
-            [1.45 * inch, 1.35 * inch, 3.6 * inch],
-        ),
+        Paragraph("Verification and measured implementation", H1),
+        Paragraph("The cocotb environment separates a memory driver, request monitors, an independent Python ISA scoreboard, and coverage checks. This uses UVM-style roles without a SystemVerilog UVM library. Directed SystemVerilog benches check ALU operations, the instruction program, and traps.", BODY),
+        *figure(DIAGRAMS / "verification_stack.svg", "Figure 4. Checks observe the core through memory transactions and retirement outputs.", 3.3 * inch),
+        make_table([
+            ["Check", "Observed result"],
+            ["Icarus directed benches", "10 ALU checks; program signature in 521 cycles; 9 traps"],
+            ["cocotb 2.0.1", "3 tests passed, including pipeline hazards and wait states"],
+            ["Vivado 2023.2 XSim", "ALU, directed, and trap benches passed"],
+            ["Arty A7-100T post-route", "WNS +0.681 ns at 10 ns; 1,631 LUTs; 1,560 registers; 4 RAMB36"],
+        ], [2.1 * inch, 4.3 * inch]),
         Spacer(1, 8),
-        Paragraph(
-            "Waveforms are evidence for the simulated design and memory model. They do not establish FPGA timing closure, CDC safety, board wiring, or privileged-architecture compliance.",
-            CALLOUT,
-        ),
+        Paragraph("The implementation run had 0 DRC errors and 26 warnings. These are report results, not physical-board measurements. See docs/pipeline_vivado_report.md for warnings and build details.", CALLOUT),
     ]
-
-    doc = document(path, "RV32I core architecture")
-    decorate = page_decorator("RV32I core architecture")
+    doc = document(path, "RV32I five-stage pipeline architecture")
+    decorate = page_decorator("RV32I five-stage pipeline")
     doc.build(story, onFirstPage=decorate, onLaterPages=decorate)
     return path
 
 
 def build_learning_guide() -> Path:
+    """Follow a load through overlapping stages and a held memory request."""
     path = OUTPUT / "learning_guide.pdf"
-    signal_rows = [
-        ["Signal", "What to watch"],
-        ["debug_state_o", "FETCH, EXECUTE, MEMORY, then FETCH"],
-        ["imem_valid_o / imem_ready_i", "Instruction request and acceptance"],
-        ["dmem_valid_o / dmem_ready_i", "Load request and completion"],
-        ["dmem_addr_o", "The value of x3 plus 12"],
-        ["retire_valid_o", "One-cycle pulse when LW finishes"],
-    ]
     story: list[Flowable] = [
-        Spacer(1, 0.3 * inch),
+        Spacer(1, 0.25 * inch),
         Paragraph("Following one load instruction", TITLE),
-        Paragraph("A waveform guide for the RV32I multicycle core", SUBTITLE),
+        Paragraph("A waveform lesson for the IF/ID/EX/MEM/WB RV32I pipeline", SUBTITLE),
         Paragraph("Example instruction", H1),
         Paragraph("lw x5, 12(x3)", CODE),
-        Paragraph(
-            "The instruction adds 12 to x3, reads a 32-bit word from that address, and writes the word into x5.",
-            CALLOUT,
-        ),
-        *figure(DIAGRAMS / "control_fsm.svg", "Figure 1. The path taken by LW is FETCH, EXECUTE, MEMORY, FETCH.", 3.15 * inch),
-        Paragraph("Signals to place in the waveform", H1),
-        make_table(signal_rows, [2.45 * inch, 3.95 * inch]),
+        Spacer(1, 18),
+        Paragraph("The instruction adds 12 to x3, reads a 32-bit word at that byte address, and writes the word to x5. Another independent instruction can be in a different stage while this load progresses.", CALLOUT),
+        *figure(DIAGRAMS / "core_datapath.svg", "Figure 1. The load crosses IF, ID, EX, MEM, and WB. A valid bit identifies its occupied stage.", 3.55 * inch),
+        Paragraph("Signals to inspect", H1),
+        make_table([
+            ["Signal", "What it tells you"],
+            ["if_valid_q / id_valid_q", "An accepted instruction and a decoded instruction are present."],
+            ["ex_valid_q / wb_valid_q", "A memory request or a result waiting to retire is present."],
+            ["dmem_valid_o / dmem_ready_i", "The load is requested and then completed."],
+            ["retire_valid_o", "The load has reached architectural retirement."],
+        ], [2.25 * inch, 4.15 * inch]),
         PageBreak(),
-        Paragraph("1. Fetch", H1),
-        Paragraph(
-            f"{code('debug_state_o')} is {code('STATE_FETCH')}. {code('imem_addr_o')} equals the current PC and {code('imem_valid_o')} is high. If instruction memory is slow, the address does not change.",
-            BODY,
-        ),
-        Paragraph(
-            f"When {code('imem_ready_i')} becomes high, the core saves {code('imem_rdata_i')} in {code('instruction_q')}. The PC has not advanced yet. Keeping the PC on the current instruction makes trap reporting and PC-relative arithmetic straightforward.",
-            BODY,
-        ),
-        Paragraph("2. Decode and address generation", H1),
-        Paragraph(
-            f"The state changes to {code('STATE_EXECUTE')}. Opcode {code('0000011')} selects the load group. {code('funct3=010')} selects a signed 32-bit word, which is {code('LW')}.",
-            BODY,
-        ),
-        Paragraph(
-            "The decoder requests an I-type immediate, a register write, a memory read, and the memory writeback path. The immediate generator takes instruction bits 31 through 20 and sign extends them. For this instruction its output is 12.",
-            BODY,
-        ),
-        Paragraph(
-            "The register file reads x3. The ALU adds x3 and 12. If the low two result bits are not zero, the core records a load-address-misaligned trap and never sends a memory request.",
-            BODY,
-        ),
-        Paragraph("Expected execute values", H2),
-        make_table(
-            [
-                ["Item", "Value"],
-                ["Source register", "rs1 = x3"],
-                ["Immediate", "12"],
-                ["ALU operation", "x3 + 12"],
-                ["Destination", "rd = x5"],
-                ["Access size", "32-bit word"],
-            ],
-            [2.2 * inch, 4.2 * inch],
-        ),
+        Paragraph("1. IF and ID", H1),
+        Paragraph("At IF, imem_addr_o equals fetch_pc_q. imem_valid_o stays high until imem_ready_i accepts the instruction. The fetched word and its PC enter the IF/ID register, marked by if_valid_q.", BODY),
+        Paragraph("ID recognizes opcode 0000011 and funct3 010 as LW. It sign extends the I-type immediate 12 and reads x3. If an older instruction will write x3, dependency holds the load in ID until that write reaches WB. A bubble moves ahead while the load waits.", BODY),
+        Paragraph("2. EX", H1),
+        Paragraph("The ALU adds the x3 value to 12. For LW, address bits [1:0] must be 00. A misaligned address creates a load-address-misaligned fault before any data request. Otherwise the effective address and load controls enter EX/MEM.", BODY),
+        Paragraph("3. MEM", H1),
+        Paragraph("dmem_valid_o stays high with a stable dmem_addr_o while dmem_ready_i is low. EX/MEM and younger stages wait. When ready rises, the returned 32-bit word is selected; dmem_error_i instead records a load access fault.", BODY),
+        *figure(DIAGRAMS / "load_timeline.svg", "Figure 2. A held load request; stage occupancy can overlap with older or younger work.", 2.65 * inch),
         PageBreak(),
-        Paragraph("3. Memory wait", H1),
-        Paragraph(
-            f"For an aligned address, the state changes to {code('STATE_MEMORY')}. {code('dmem_addr_o')} is the ALU sum, {code('dmem_valid_o')} stays high, and {code('dmem_write_o')} is zero.",
-            BODY,
-        ),
-        Paragraph(
-            f"Nothing retires while {code('dmem_ready_i')} is low. The core is waiting, not repeating the instruction. When ready rises, {code('dmem_error_i')} causes a load access fault. Otherwise the 32-bit {code('dmem_rdata_i')} value is written to x5 on the clock edge.",
-            BODY,
-        ),
-        Paragraph("Handshake timeline", H2),
-        *figure(DIAGRAMS / "load_timeline.svg", "Figure 2. A load request remains stable until ready completes it.", 2.75 * inch),
-        Paragraph("4. Retirement", H1),
-        Paragraph(
-            f"The PC increases by four, {code('retire_valid_o')} pulses, and the state returns to fetch. The register-file write and retirement pulse happen on the same completion edge.",
-            BODY,
-        ),
-        Paragraph("Try the byte-load variation", H1),
-        Paragraph("lb x5, 13(x3)", CODE),
-        Paragraph(
-            "The byte address is legal even when its low bits are nonzero. Memory still returns the aligned 32-bit word. The load-align block selects one byte using the low address bits and sign extends bit 7 before writing x5.",
-            BODY,
-        ),
-        Paragraph(
-            "Useful comparison: change LB to LBU and use a returned byte whose high bit is one. LB fills the upper 24 bits with ones; LBU fills them with zeros.",
-            CALLOUT,
-        ),
+        Paragraph("4. WB and retirement", H1),
+        Paragraph("The completed load enters MEM/WB. On its WB edge, the register file writes x5 and retire_valid_o pulses with the load's PC and instruction word. A faulting load does neither. x0 remains zero even if selected as the destination.", BODY),
+        Paragraph("Try a dependent instruction", H1),
+        Paragraph("Place ADD x6,x5,x5 after the load. Because this baseline has no forwarding, the ADD stays in ID until the load writes x5. Then it reads the new word twice. In the waveform, look for the held IF/ID instruction, a bubble ahead of it, and a later retirement pulse.", BODY),
+        Paragraph("Try a byte load", H1),
+        Paragraph("Change LW to LB and the offset to 13. A byte address may have nonzero low bits. Memory still returns the aligned 32-bit word; the core selects the addressed byte and sign extends bit 7. LBU would zero extend that same byte.", BODY),
         Paragraph("Reproduce the waveform", H1),
-        Paragraph(
-            f"Run {code('make test-cocotb-waves PYTHON=.venv/bin/python')}. Verilator writes {code('sim/build/cocotb/dump.fst')}; open it with the checked-in {code('waves/rv32i_core.gtkw')} signal grouping. The cocotb test adds zero-to-three-cycle memory delays so stable request intervals are visible.",
-            BODY,
-        ),
-        Paragraph(
-            "GTKWave is a viewer, not a verification oracle. The pass/fail result comes from the cocotb assertions and retirement comparison; the FST trace supports diagnosis and teaching.",
-            CALLOUT,
-        ),
+        Paragraph("Run make test-cocotb-waves PYTHON=.venv/bin/python. Open sim/build/cocotb/dump.fst with waves/rv32i_core.gtkw. The scoreboard and assertions determine pass/fail; the waveform lets you see why the pipeline stalled or advanced.", BODY),
     ]
-
-    doc = document(path, "Following one load instruction")
-    decorate = page_decorator("Following one load instruction")
+    doc = document(path, "Following one load in the RV32I pipeline")
+    decorate = page_decorator("RV32I pipeline load lesson")
     doc.build(story, onFirstPage=decorate, onLaterPages=decorate)
     return path
 
@@ -501,4 +345,6 @@ if __name__ == "__main__":
     OUTPUT.mkdir(parents=True, exist_ok=True)
     generated = [build_architecture(), build_learning_guide()]
     for item in generated:
+        # Keep the convenience copies in docs/ identical to the canonical PDFs.
+        copyfile(item, ROOT / "docs" / item.name)
         print(item)

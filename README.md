@@ -1,21 +1,16 @@
 # RV32I SystemVerilog CPU core
 
-This repository contains a small 32-bit RISC-V processor written for learning, simulation, and eventual FPGA work. It implements the unprivileged RV32I base instruction set with separate instruction and data memory ports. The pipeline RTL has passed simulation and elaboration; synthesis on Vivado remains to be checked.
+This repository contains a small 32-bit RISC-V processor written for learning, simulation, and FPGA work. It implements the unprivileged RV32I base instruction set with separate instruction and data memory ports. Vivado 2023.2 has simulated, synthesized, and routed the pipeline for the Arty A7-100T; the board itself has not been tested.
 
 The core now uses five in-order stages: IF, ID, EX, MEM, and WB. Valid bits carry instructions between stages. Register dependencies and memory waits stall younger instructions; branches resolve in EX, and faults drain older work before the trap becomes visible. See [docs/pipeline.md](docs/pipeline.md) for the current stage contract.
 
-The older datapath drawing and generated architecture guides below describe the previous multicycle implementation and need regeneration for this pipeline.
+![Five-stage RV32I datapath](docs/diagrams/core_datapath.svg)
 
 The [earlier OSS CAD synthesis report](docs/synthesis_and_performance.md) and
 its raw logs also describe that multicycle design. Current pipeline synthesis
 and implementation results are in [the Vivado report](docs/pipeline_vivado_report.md).
 
-For a deeper design review, open the
-[interactive Archify architecture map](docs/archify/rv32i-core.architecture.html).
-It adds guided instruction, load, and control/trap views; relationship tracing;
-light and dark themes; and source-grounded interface and verification notes.
-
-[![Archify RV32I architecture preview](docs/archify/rv32i-core.architecture.visual-check.1440x900.light.png)](docs/archify/rv32i-core.architecture.html)
+For a deeper design review, open the [interactive architecture map](docs/archify/rv32i-core.architecture.html). Its guided views follow a normal instruction, a load, and a branch or trap through the pipeline.
 
 ## What is implemented
 
@@ -116,7 +111,10 @@ The GUI procedure, expected files, and common setup mistakes are in [docs/vivado
 
 ## Reading order
 
-Start with the [architecture guide](output/pdf/architecture.pdf), then explore the [interactive Archify map](docs/archify/rv32i-core.architecture.html) or use the [learning guide](output/pdf/learning_guide.pdf) to follow one `LW` instruction through the core. [docs/instruction_notes.md](docs/instruction_notes.md) is the compact instruction reference. The exact memory handshake is described in [docs/memory_interface.md](docs/memory_interface.md).
+Start with the [pipeline architecture guide](output/pdf/architecture.pdf), then explore the [interactive map](docs/archify/rv32i-core.architecture.html) or use the [load learning guide](output/pdf/learning_guide.pdf) to follow one `LW` through IF, ID, EX, MEM, and WB. [docs/pipeline.md](docs/pipeline.md) explains stalls and valid bits in text. [docs/instruction_notes.md](docs/instruction_notes.md) is the instruction reference, and [docs/memory_interface.md](docs/memory_interface.md) defines the memory handshake.
+
+Run `make docs PYTHON=.venv/bin/python` to regenerate both PDFs. The script
+also refreshes the identical convenience copies in `docs/`.
 
 The sources that informed the design are listed in [docs/references.md](docs/references.md). The RTL and diagram specification are original work. PicoRV32 and Ibex informed memory-interface and documentation choices; Aegis-Stream informed the concise invariant-focused RTL comment structure and layered simulation workflow; Archify renders and validates the interactive architecture artifact.
 

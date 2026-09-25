@@ -15,8 +15,8 @@ RV32I uses six 32-bit instruction layouts. Register fields stay in the same bit 
 | Stores | `SB`, `SH`, `SW` | Replicate store data and select byte lanes with `wstrb` |
 | Immediate ALU | `ADDI`, `SLTI`, `SLTIU`, `XORI`, `ORI`, `ANDI`, `SLLI`, `SRLI`, `SRAI` | ALU with a sign-extended immediate or encoded shift amount |
 | Register ALU | `ADD`, `SUB`, `SLL`, `SLT`, `SLTU`, `XOR`, `SRL`, `SRA`, `OR`, `AND` | ALU with two register operands |
-| Ordering | `FENCE` | Accepted as an ordered no-op because only one memory request can be outstanding |
-| Environment | `ECALL`, `EBREAK` | Enter the sticky trap state |
+| Ordering | `FENCE` | Pauses fetch until older memory work completes, then retires |
+| Environment | `ECALL`, `EBREAK` | Drain older instructions, then publish a sticky trap |
 
 These are the 40 named instructions in the RV32I base. `FENCE.I` is part of the separate Zifencei extension and is illegal in this core. CSR instructions are in Zicsr and are also illegal here.
 

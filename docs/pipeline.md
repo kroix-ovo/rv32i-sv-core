@@ -48,5 +48,6 @@ separation; it is not a SystemVerilog UVM implementation.
 
 Vivado 2023.2 simulation, synthesis, and routed timing results are in
 `docs/pipeline_vivado_report.md`. Physical-board execution remains untested.
-Existing generated PDFs, static datapath graphics, and Archify artifacts
-still describe the earlier multicycle controller.
+The architecture and learning PDFs, datapath graphics, and interactive map
+now describe this five-stage pipeline. The OSS CAD synthesis report is retained
+as a labeled historical measurement of the earlier multicycle core.

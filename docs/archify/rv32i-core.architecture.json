@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "RV32I Multicycle Core",
+    "title": "RV32I Five-Stage Pipeline",
     "locale": "en",
     "output": "docs/archify/rv32i-core.architecture.html",
     "quality_profile": "showcase",
@@ -23,7 +23,7 @@
         "id": "control-and-trap",
         "label": "Control and trap path",
         "focus": ["controller", "decoder", "pc", "memory_request", "trap_retire"],
-        "note": "The four-state controller owns progress; alignment, decode, and access faults enter a sticky external trap record."
+        "note": "Valid bits track occupied stages; older work retires before an external trap record becomes sticky."
       }
     ]
   },
@@ -32,7 +32,7 @@
       "id": "pc",
       "type": "backend",
       "label": "Program Counter",
-      "sublabel": "pc_q / next PC",
+      "sublabel": "fetch_pc_q / branch target",
       "pos": [20, 300],
       "size": [125, 58],
       "tag": "32-bit byte address"
@@ -49,11 +49,11 @@
     {
       "id": "instruction",
       "type": "database",
-      "label": "Instruction Register",
-      "sublabel": "instruction_q",
+      "label": "IF/ID Register",
+      "sublabel": "if_instruction_q",
       "pos": [400, 300],
       "size": [140, 58],
-      "tag": "held through execute"
+      "tag": "valid IF/ID entry"
     },
     {
       "id": "decoder",
@@ -112,7 +112,7 @@
     {
       "id": "writeback",
       "type": "backend",
-      "label": "Load Align + Writeback",
+      "label": "MEM/WB + Writeback",
       "sublabel": "ALU / memory / PC+4",
       "pos": [840, 520],
       "size": [165, 64],
@@ -121,11 +121,11 @@
     {
       "id": "controller",
       "type": "cloud",
-      "label": "Four-State Controller",
-      "sublabel": "FETCH / EXEC / MEM / TRAP",
+      "label": "Pipeline Interlocks",
+      "sublabel": "IF / ID / EX / MEM / WB",
       "pos": [620, 520],
       "size": [170, 68],
-      "tag": "single instruction owner"
+      "tag": "valid bits and stalls"
     },
     {
       "id": "trap_retire",
@@ -279,8 +279,8 @@
       "title": "Architectural Contract",
       "items": [
         "Unprivileged RV32I with 32-bit byte addresses and IALIGN=32",
-        "No pipeline hazards: one instruction owns the datapath",
-        "No CSRs, interrupts, caches, MMU, M, or C extension"
+        "RAW interlocks, memory waits, and branch redirects control progress",
+        "No forwarding, CSRs, interrupts, caches, MMU, M, or C extension"
       ]
     },
     {
@@ -298,7 +298,7 @@
       "items": [
         "Verilator lint and cocotb retirement scoreboard pass",
         "Icarus directed, ALU, and trap suites pass",
-        "Simulation evidence does not claim FPGA timing closure"
+        "Vivado post-route WNS +0.681 ns; physical board untested"
       ]
     }
   ]

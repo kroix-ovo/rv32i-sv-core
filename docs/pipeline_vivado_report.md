@@ -62,6 +62,6 @@ remaining CHECK-3 warning reports the REQP warning count limit. These
 warnings did not prevent routing or bitstream creation, but they should be
 reviewed before treating the board result as final.
 
-The older PDFs, static datapath diagrams, and Archify map in this repository
-still show the previous multicycle controller. Use `docs/pipeline.md` and
-the RTL for the current architecture.
+The current architecture PDF, static datapath diagrams, and interactive map
+describe the pipeline. `docs/synthesis_and_performance.md` and its OSS CAD
+logs remain labeled historical results for the earlier multicycle controller.
