@@ -1,0 +1,62 @@
+{
+  "creator": "Yosys 0.68+195 (git sha1 435977e97-dirty, Release, Clang /usr/local/osxcross/target/bin/aarch64-apple-darwin25.5-clang++ 21.1.8)",
+  "invocation": "stat -json ",
+  "modules": {
+    "\\rv32i_core": {
+      "num_wires": 6987,
+      "num_wire_bits": 8855,
+      "num_pub_wires": 58,
+      "num_pub_wire_bits": 1926,
+      "num_ports": 24,
+      "num_port_bits": 369,
+      "num_memories": 0,
+      "num_memory_bits": 0,
+      "num_processes": 0,
+      "num_cells": 8307,
+      "num_submodules": 0,
+      "num_cells_by_type": {
+        "$_ANDNOT_": 178,
+        "$_AND_": 1707,
+        "$_DFFE_PN0P_": 1263,
+        "$_DFFE_PN1P_": 3,
+        "$_DFF_PN0_": 3,
+        "$_MUX_": 1149,
+        "$_NAND_": 2759,
+        "$_NOR_": 233,
+        "$_NOT_": 75,
+        "$_ORNOT_": 314,
+        "$_OR_": 459,
+        "$_XNOR_": 52,
+        "$_XOR_": 112
+      }
+    }
+  },
+  "design": {
+    "num_wires": 6987,
+    "num_wire_bits": 8855,
+    "num_pub_wires": 58,
+    "num_pub_wire_bits": 1926,
+    "num_ports": 24,
+    "num_port_bits": 369,
+    "num_memories": 0,
+    "num_memory_bits": 0,
+    "num_processes": 0,
+    "num_cells": 8307,
+    "num_submodules": 0,
+    "num_cells_by_type": {
+      "$_ANDNOT_": 178,
+      "$_AND_": 1707,
+      "$_DFFE_PN0P_": 1263,
+      "$_DFFE_PN1P_": 3,
+      "$_DFF_PN0_": 3,
+      "$_MUX_": 1149,
+      "$_NAND_": 2759,
+      "$_NOR_": 233,
+      "$_NOT_": 75,
+      "$_ORNOT_": 314,
+      "$_OR_": 459,
+      "$_XNOR_": 52,
+      "$_XOR_": 112
+    }
+  }
+}

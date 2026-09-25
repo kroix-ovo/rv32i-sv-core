@@ -6,6 +6,10 @@ The core now uses five in-order stages: IF, ID, EX, MEM, and WB. Valid bits carr
 
 The older datapath drawing and generated architecture guides below describe the previous multicycle implementation and need regeneration for this pipeline.
 
+The [earlier OSS CAD synthesis report](docs/synthesis_and_performance.md) and
+its raw logs also describe that multicycle design. Current pipeline synthesis
+and implementation results are in [the Vivado report](docs/pipeline_vivado_report.md).
+
 For a deeper design review, open the
 [interactive Archify architecture map](docs/archify/rv32i-core.architecture.html).
 It adds guided instruction, load, and control/trap views; relationship tracing;

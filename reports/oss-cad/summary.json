@@ -1,0 +1,45 @@
+{
+  "suite_release": "2026-09-05",
+  "yosys_version": "Yosys 0.68+195 (git sha1 435977e97-dirty, Release, Clang /usr/local/osxcross/target/bin/aarch64-apple-darwin25.5-clang++ 21.1.8)",
+  "yosys_version_short": "Yosys 0.68+195",
+  "top": "rv32i_core",
+  "generic_synthesis": {
+    "cells": 8307,
+    "sequential_cells": 1269,
+    "mux_cells": 1149
+  },
+  "xc7_estimate": {
+    "estimated_lcs": 2132,
+    "flip_flops": 1270,
+    "lut1": 10,
+    "lut2": 287,
+    "lut3": 306,
+    "lut4": 433,
+    "lut5": 783,
+    "lut6": 610,
+    "carry4": 52,
+    "muxf7": 47,
+    "muxf8": 12
+  },
+  "zero_wait_performance": {
+    "scenario": "zero_wait",
+    "cycles": 282,
+    "retired_instructions": 134,
+    "cpi": 2.104478,
+    "ipc": 0.475177,
+    "instruction_transactions": 136,
+    "data_transactions": 15
+  },
+  "wait_state_performance": {
+    "scenario": "deterministic_0_to_3_cycle_waits",
+    "cycles": 501,
+    "retired_instructions": 134,
+    "cpi": 3.738806,
+    "ipc": 0.267465,
+    "instruction_wait_cycles": 200,
+    "data_wait_cycles": 20,
+    "instruction_transactions": 134,
+    "data_transactions": 15
+  },
+  "scope": "pre-place-and-route core-only estimate; no BRAM, timing, or fmax claim"
+}
