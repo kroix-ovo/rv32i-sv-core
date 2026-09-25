@@ -1,0 +1,44 @@
+[*]
+[*] RV32I cocotb + Verilator waveform groups
+[dumpfile] "../sim/build/cocotb/dump.fst"
+[savefile] "rv32i_core.gtkw"
+[timestart] 0
+[size] 1500 900
+[treeopen] TOP.rv32i_core.
+@28
+TOP.rv32i_core.clk_i
+TOP.rv32i_core.rst_ni
+@22
+-CPU state and retirement
+@28
+TOP.rv32i_core.debug_state_o[1:0]
+TOP.rv32i_core.debug_pc_o[31:0]
+TOP.rv32i_core.retire_valid_o
+TOP.rv32i_core.retire_pc_o[31:0]
+TOP.rv32i_core.retire_instruction_o[31:0]
+@22
+-Instruction memory handshake
+@28
+TOP.rv32i_core.imem_valid_o
+TOP.rv32i_core.imem_ready_i
+TOP.rv32i_core.imem_addr_o[31:0]
+TOP.rv32i_core.imem_rdata_i[31:0]
+TOP.rv32i_core.imem_error_i
+@22
+-Data memory handshake
+@28
+TOP.rv32i_core.dmem_valid_o
+TOP.rv32i_core.dmem_ready_i
+TOP.rv32i_core.dmem_write_o
+TOP.rv32i_core.dmem_addr_o[31:0]
+TOP.rv32i_core.dmem_wdata_o[31:0]
+TOP.rv32i_core.dmem_wstrb_o[3:0]
+TOP.rv32i_core.dmem_rdata_i[31:0]
+TOP.rv32i_core.dmem_error_i
+@22
+-Trap record
+@28
+TOP.rv32i_core.trap_valid_o
+TOP.rv32i_core.trap_cause_o[31:0]
+TOP.rv32i_core.trap_pc_o[31:0]
+TOP.rv32i_core.trap_tval_o[31:0]

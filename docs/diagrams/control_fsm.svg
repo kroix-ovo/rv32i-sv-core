@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
+  <title id="title">RV32I core control state machine</title>
+  <desc id="desc">Fetch moves to execute after instruction ready. Execute returns to fetch for ordinary instructions or moves to memory for loads and stores. Faults move to a sticky trap state.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#111"/></marker>
+    <style>.state{fill:#f7fbff;stroke:#183153;stroke-width:2.5}.trap{fill:#fff1ee;stroke:#b44134;stroke-width:2.5}.line{fill:none;stroke:#183153;stroke-width:2;marker-end:url(#arrow)}.name{font:bold 18px Arial,sans-serif;text-anchor:middle;fill:#183153}.note{font:14px Arial,sans-serif;text-anchor:middle;fill:#34495e}.title{font:bold 24px Georgia,serif;text-anchor:middle;fill:#183153}</style>
+  </defs>
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="500" y="38" class="title">Control state machine</text>
+  <circle cx="75" cy="180" r="7" fill="#111"/>
+  <rect x="150" y="125" rx="8" width="190" height="110" class="state"/>
+  <text x="245" y="165" class="name">FETCH</text><text x="245" y="192" class="note">Hold imem_valid high</text><text x="245" y="214" class="note">until imem_ready</text>
+  <rect x="420" y="125" rx="8" width="190" height="110" class="state"/>
+  <text x="515" y="165" class="name">EXECUTE</text><text x="515" y="192" class="note">Decode, compare, ALU</text><text x="515" y="214" class="note">and next-PC choice</text>
+  <rect x="690" y="125" rx="8" width="190" height="110" class="state"/>
+  <text x="785" y="165" class="name">MEMORY</text><text x="785" y="192" class="note">Hold dmem_valid high</text><text x="785" y="214" class="note">until dmem_ready</text>
+  <rect x="420" y="380" rx="8" width="190" height="105" class="trap"/>
+  <text x="515" y="420" class="name">TRAP</text><text x="515" y="447" class="note">Hold cause, PC, and tval</text><text x="515" y="469" class="note">until reset</text>
+
+  <path d="M82 180 H150" class="line"/><text x="115" y="165" class="note">reset</text>
+  <path d="M340 180 H420" class="line"/><text x="380" y="163" class="note">instruction ready</text>
+  <path d="M610 180 H690" class="line"/><text x="650" y="157" class="note">load or store</text>
+  <path d="M785 235 C785 310 245 310 245 235" class="line"/><text x="515" y="298" class="note">memory ready: retire, PC = PC + 4</text>
+  <path d="M515 125 C515 70 245 70 245 125" class="line"/><text x="380" y="82" class="note">ALU, branch, jump, or FENCE: retire</text>
+  <path d="M245 235 C245 345 455 345 480 380" class="line"/><text x="303" y="335" class="note">fetch fault</text>
+  <path d="M515 235 V380" class="line"/><text x="579" y="318" class="note">illegal, system, or alignment fault</text>
+  <path d="M785 235 C785 355 610 355 555 380" class="line"/><text x="742" y="345" class="note">data access fault</text>
+</svg>

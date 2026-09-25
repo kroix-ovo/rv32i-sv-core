@@ -1,0 +1,5 @@
+cocotb==2.0.1
+pytest==8.4.1
+pyslang==11.0.0
+reportlab==4.4.3
+svglib==1.5.1

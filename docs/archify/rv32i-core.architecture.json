@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RV32I Multicycle Core",
+    "locale": "en",
+    "output": "docs/archify/rv32i-core.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "instruction-path",
+        "label": "Instruction path",
+        "focus": ["pc", "imem", "instruction", "decoder", "regfile", "alu", "writeback"],
+        "note": "Follow a non-memory instruction from byte-addressed fetch through decode, execute, writeback, and retirement."
+      },
+      {
+        "id": "load-path",
+        "label": "Load path",
+        "focus": ["regfile", "immediate", "alu", "memory_request", "dmem", "writeback"],
+        "note": "See effective-address generation, the held data-memory request, load alignment, and destination-register writeback."
+      },
+      {
+        "id": "control-and-trap",
+        "label": "Control and trap path",
+        "focus": ["controller", "decoder", "pc", "memory_request", "trap_retire"],
+        "note": "The four-state controller owns progress; alignment, decode, and access faults enter a sticky external trap record."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pc",
+      "type": "backend",
+      "label": "Program Counter",
+      "sublabel": "pc_q / next PC",
+      "pos": [20, 300],
+      "size": [125, 58],
+      "tag": "32-bit byte address"
+    },
+    {
+      "id": "imem",
+      "type": "external",
+      "label": "Instruction Memory",
+      "sublabel": "imem valid / ready",
+      "pos": [200, 300],
+      "size": [135, 58],
+      "tag": "one request"
+    },
+    {
+      "id": "instruction",
+      "type": "database",
+      "label": "Instruction Register",
+      "sublabel": "instruction_q",
+      "pos": [400, 300],
+      "size": [140, 58],
+      "tag": "held through execute"
+    },
+    {
+      "id": "decoder",
+      "type": "security",
+      "label": "RV32I Decoder",
+      "sublabel": "opcode + funct fields",
+      "pos": [400, 90],
+      "size": [140, 62],
+      "tag": "legality + controls"
+    },
+    {
+      "id": "immediate",
+      "type": "backend",
+      "label": "Immediate Generator",
+      "sublabel": "I / S / B / U / J",
+      "pos": [850, 90],
+      "size": [145, 62],
+      "tag": "sign extension"
+    },
+    {
+      "id": "regfile",
+      "type": "database",
+      "label": "Register File",
+      "sublabel": "2 reads / 1 write",
+      "pos": [620, 300],
+      "size": [140, 64],
+      "tag": "x0 hardwired zero"
+    },
+    {
+      "id": "alu",
+      "type": "backend",
+      "label": "ALU + Branch Compare",
+      "sublabel": "32-bit combinational",
+      "pos": [845, 300],
+      "size": [155, 64],
+      "tag": "result + target"
+    },
+    {
+      "id": "memory_request",
+      "type": "messagebus",
+      "label": "Memory Request",
+      "sublabel": "address / data / strobes",
+      "pos": [1030, 300],
+      "size": [150, 64],
+      "tag": "stable until ready"
+    },
+    {
+      "id": "dmem",
+      "type": "external",
+      "label": "Data Memory",
+      "sublabel": "dmem valid / ready",
+      "pos": [1210, 300],
+      "size": [135, 62],
+      "tag": "little-endian word"
+    },
+    {
+      "id": "writeback",
+      "type": "backend",
+      "label": "Load Align + Writeback",
+      "sublabel": "ALU / memory / PC+4",
+      "pos": [840, 520],
+      "size": [165, 64],
+      "tag": "rd transaction"
+    },
+    {
+      "id": "controller",
+      "type": "cloud",
+      "label": "Four-State Controller",
+      "sublabel": "FETCH / EXEC / MEM / TRAP",
+      "pos": [620, 520],
+      "size": [170, 68],
+      "tag": "single instruction owner"
+    },
+    {
+      "id": "trap_retire",
+      "type": "security",
+      "label": "Trap + Retirement",
+      "sublabel": "cause / PC / tval / retire",
+      "pos": [1200, 520],
+      "size": [155, 64],
+      "tag": "external observation"
+    }
+  ],
+  "connections": [
+    {
+      "id": "pc-fetch-address",
+      "from": "pc",
+      "to": "imem",
+      "label": "imem_addr_o",
+      "variant": "emphasis",
+      "labelDy": -43
+    },
+    {
+      "id": "fetch-instruction",
+      "from": "imem",
+      "to": "instruction",
+      "label": "accepted instruction",
+      "variant": "emphasis",
+      "labelDy": -43
+    },
+    {
+      "id": "instruction-decode",
+      "from": "instruction",
+      "to": "decoder",
+      "label": "opcode / funct3 / funct7",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "route": "straight",
+      "labelDx": 80
+    },
+    {
+      "id": "instruction-register-addresses",
+      "from": "instruction",
+      "to": "regfile",
+      "label": "rs1 / rs2 / rd",
+      "labelDy": -43
+    },
+    {
+      "id": "instruction-immediate-bits",
+      "from": "instruction",
+      "to": "immediate",
+      "label": "encoded immediate",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "left",
+      "via": [[470, 210], [815, 210], [815, 121]],
+      "labelAt": [650, 200]
+    },
+    {
+      "id": "register-operands",
+      "from": "regfile",
+      "to": "alu",
+      "label": "rs1_data / rs2_data",
+      "variant": "emphasis",
+      "labelDy": -43
+    },
+    {
+      "id": "immediate-operand",
+      "from": "immediate",
+      "to": "alu",
+      "label": "immediate",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight",
+      "labelAt": [975, 220]
+    },
+    {
+      "id": "alu-memory-request",
+      "from": "alu",
+      "to": "memory_request",
+      "label": "effective address + store data",
+      "variant": "emphasis",
+      "labelDy": -43
+    },
+    {
+      "id": "native-data-port",
+      "from": "memory_request",
+      "to": "dmem",
+      "label": "held ready / valid transfer",
+      "variant": "emphasis",
+      "labelDy": -43
+    },
+    {
+      "id": "load-return",
+      "from": "dmem",
+      "to": "writeback",
+      "label": "dmem_rdata_i",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "via": [[1277.5, 450], [1020, 450], [1020, 552]],
+      "labelAt": [1145, 440]
+    },
+    {
+      "id": "alu-writeback",
+      "from": "alu",
+      "to": "writeback",
+      "label": "ALU result or PC + 4",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight",
+      "labelAt": [995, 440]
+    },
+    {
+      "id": "register-writeback",
+      "from": "writeback",
+      "to": "regfile",
+      "label": "rd_data_i",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right",
+      "via": [[815, 552], [815, 430], [795, 430], [795, 332]],
+      "labelAt": [805, 420]
+    },
+    {
+      "id": "decode-controller",
+      "from": "decoder",
+      "to": "controller",
+      "label": "instruction class + fault",
+      "variant": "security",
+      "fromSide": "left",
+      "toSide": "bottom",
+      "via": [[10, 121], [10, 665], [705, 665]],
+      "labelAt": [515, 655]
+    },
+    {
+      "id": "memory-fault-observation",
+      "from": "dmem",
+      "to": "trap_retire",
+      "label": "ready + error / retirement",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight",
+      "labelAt": [1160, 480]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Architectural Contract",
+      "items": [
+        "Unprivileged RV32I with 32-bit byte addresses and IALIGN=32",
+        "No pipeline hazards: one instruction owns the datapath",
+        "No CSRs, interrupts, caches, MMU, M, or C extension"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Interface Invariants",
+      "items": [
+        "Instruction and data requests remain stable until ready",
+        "Only one native memory request is outstanding",
+        "Misaligned control transfers and data accesses trap"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Verification Evidence",
+      "items": [
+        "Verilator lint and cocotb retirement scoreboard pass",
+        "Icarus directed, ALU, and trap suites pass",
+        "Simulation evidence does not claim FPGA timing closure"
+      ]
+    }
+  ]
+}
