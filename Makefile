@@ -9,7 +9,7 @@ RTL = rtl/rv32i_pkg.sv rtl/rv32i_alu.sv rtl/rv32i_imm_gen.sv \
       rtl/rv32i_regfile.sv rtl/rv32i_decoder.sv rtl/rv32i_core.sv \
       rtl/rv32i_soc.sv
 
-.PHONY: all programs test test-sv test-cocotb test-cocotb-waves lint-verilator \
+.PHONY: all programs test test-sv test-cocotb test-cocotb-waves test-uvm lint-verilator \
 	model docs architecture-map architecture-check wave clean
 
 all: test
@@ -39,6 +39,11 @@ test-cocotb: programs
 
 test-cocotb-waves: programs
 	$(PYTHON) scripts/run_cocotb.py --waves
+
+# Native SystemVerilog UVM 1.2 regression under locally installed Vivado XSim.
+# Intentionally separate from the portable GitHub CI gate.
+test-uvm: programs
+	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_uvm.ps1
 
 model: programs
 	$(PYTHON) python/rv32i_model.py
