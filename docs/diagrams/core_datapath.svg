@@ -1,61 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
-  <title id="title">RV32I multicycle core datapath</title>
-  <desc id="desc">A block diagram showing the program counter, instruction memory, decoder, register file, immediate generator, ALU, data memory, writeback, controller, and trap output.</desc>
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L10,4 L0,8 Z" fill="#111"/>
-    </marker>
-    <style>
-      .box{fill:#f7fbff;stroke:#183153;stroke-width:2}.soft{fill:#e8f4f2;stroke:#176b63;stroke-width:2}
-      .wire{fill:none;stroke:#183153;stroke-width:2;marker-end:url(#arrow)}
-      .dash{fill:none;stroke:#a35f18;stroke-width:1.7;stroke-dasharray:7 5;marker-end:url(#arrow)}
-      .label{font:bold 16px Arial,Helvetica,sans-serif;fill:#183153;text-anchor:middle}
-      .small{font:13px Arial,Helvetica,sans-serif;fill:#34495e;text-anchor:middle}
-      .title{font:bold 24px Georgia,serif;fill:#183153;text-anchor:middle}
-    </style>
-  </defs>
-  <rect width="1200" height="700" fill="#ffffff"/>
-  <text x="600" y="38" class="title">RV32I multicycle datapath</text>
-
-  <rect x="45" y="125" width="120" height="70" class="box"/>
-  <text x="105" y="154" class="label">Program</text><text x="105" y="178" class="label">counter</text>
-  <rect x="220" y="125" width="155" height="70" class="box"/>
-  <text x="297" y="154" class="label">Instruction</text><text x="297" y="178" class="label">memory port</text>
-  <rect x="430" y="125" width="155" height="70" class="box"/>
-  <text x="507" y="154" class="label">Instruction</text><text x="507" y="178" class="label">register</text>
-  <rect x="640" y="95" width="165" height="100" class="soft"/>
-  <text x="722" y="131" class="label">Decoder</text><text x="722" y="157" class="small">opcode, funct3, funct7</text><text x="722" y="179" class="small">control signals</text>
-
-  <rect x="420" y="300" width="175" height="115" class="box"/>
-  <text x="507" y="334" class="label">Register file</text><text x="507" y="361" class="small">x0 is always zero</text><text x="507" y="385" class="small">2 reads, 1 write</text>
-  <rect x="655" y="215" width="135" height="75" class="box"/>
-  <text x="722" y="244" class="label">Immediate</text><text x="722" y="269" class="label">generator</text>
-  <rect x="875" y="290" width="145" height="115" class="box"/>
-  <text x="947" y="333" class="label">ALU and</text><text x="947" y="358" class="label">branch compare</text><text x="947" y="383" class="small">32-bit combinational</text>
-
-  <rect x="875" y="500" width="145" height="90" class="box"/>
-  <text x="947" y="535" class="label">Data memory</text><text x="947" y="561" class="label">port</text>
-  <rect x="640" y="505" width="165" height="80" class="box"/>
-  <text x="722" y="537" class="label">Load align and</text><text x="722" y="562" class="label">writeback mux</text>
-  <rect x="245" y="500" width="160" height="90" class="soft"/>
-  <text x="325" y="535" class="label">State machine</text><text x="325" y="561" class="small">FETCH, EXECUTE, MEMORY</text>
-  <rect x="45" y="510" width="130" height="70" class="box"/>
-  <text x="110" y="540" class="label">Trap</text><text x="110" y="564" class="small">cause, PC, tval</text>
-
-  <path d="M165 160 H220" class="wire"/><text x="192" y="148" class="small">address</text>
-  <path d="M375 160 H430" class="wire"/><text x="402" y="148" class="small">instruction</text>
-  <path d="M585 145 H640" class="wire"/>
-  <path d="M507 195 V300" class="wire"/><text x="540" y="247" class="small">rs1, rs2, rd</text>
-  <path d="M550 195 V205 H722 V215" class="wire"/>
-  <path d="M595 335 H875" class="wire"/><text x="730" y="323" class="small">register operands</text>
-  <path d="M790 252 H835 V315 H875" class="wire"/><text x="833" y="240" class="small">immediate</text>
-  <path d="M947 405 V500" class="wire"/><text x="985" y="455" class="small">address/data</text>
-  <path d="M875 545 H805" class="wire"/>
-  <path d="M640 545 H595 V395" class="wire"/><text x="615" y="470" class="small">rd data</text>
-  <path d="M947 290 C1080 230 1080 75 105 75 V125" class="wire"/><text x="560" y="65" class="small">next PC: PC+4, branch, JAL, or JALR</text>
-
-  <path d="M405 520 C395 315 575 230 690 195" class="dash"/>
-  <path d="M405 555 C570 630 960 630 947 590" class="dash"/>
-  <path d="M245 545 H175" class="dash"/>
-  <text x="495" y="625" class="small">Dashed lines are control or fault paths. Solid lines carry instructions, addresses, or data.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="590" viewBox="0 0 1200 590" role="img" aria-labelledby="title desc">
+<title id="title">RV32I five-stage pipeline datapath</title><desc id="desc">IF, ID, EX, MEM, and WB can hold different instructions. Valid bits mark occupied stage registers. RAW dependencies, memory waits, branches, and faults control progress.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0L10 4L0 8Z" fill="#183153"/></marker><style>.box{fill:#eef5fb;stroke:#183153;stroke-width:2}.reg{fill:#e8f4f2;stroke:#176b63;stroke-width:2}.wire{fill:none;stroke:#183153;stroke-width:2;marker-end:url(#arrow)}.control{fill:none;stroke:#a35f18;stroke-width:2;stroke-dasharray:7 5;marker-end:url(#arrow)}.title{font:bold 25px Georgia,serif;fill:#183153;text-anchor:middle}.name{font:bold 18px Arial,sans-serif;fill:#183153;text-anchor:middle}.note{font:13px Arial,sans-serif;fill:#34495e;text-anchor:middle}</style></defs>
+<rect width="1200" height="590" fill="white"/><text x="600" y="37" class="title">RV32I in-order five-stage pipeline</text>
+<rect x="35" y="125" width="180" height="145" rx="8" class="box"/><text x="125" y="160" class="name">IF</text><text x="125" y="190" class="note">fetch_pc_q</text><text x="125" y="215" class="note">instruction valid/ready</text><text x="125" y="240" class="note">hold request until ready</text>
+<rect x="264" y="125" width="180" height="145" rx="8" class="box"/><text x="354" y="160" class="name">ID</text><text x="354" y="190" class="note">decode and immediate</text><text x="354" y="215" class="note">read register file</text><text x="354" y="240" class="note">wait on RAW dependency</text>
+<rect x="493" y="125" width="180" height="145" rx="8" class="box"/><text x="583" y="160" class="name">EX</text><text x="583" y="190" class="note">ALU and comparison</text><text x="583" y="215" class="note">branch target or address</text><text x="583" y="240" class="note">check alignment</text>
+<rect x="722" y="125" width="180" height="145" rx="8" class="box"/><text x="812" y="160" class="name">MEM</text><text x="812" y="190" class="note">data valid/ready</text><text x="812" y="215" class="note">byte lanes and load align</text><text x="812" y="240" class="note">hold younger stages</text>
+<rect x="951" y="125" width="180" height="145" rx="8" class="box"/><text x="1041" y="160" class="name">WB</text><text x="1041" y="190" class="note">write rd, except x0</text><text x="1041" y="215" class="note">retire PC + instruction</text><text x="1041" y="240" class="note">one per clock edge</text>
+<path d="M215 196H264M444 196H493M673 196H722M902 196H951" class="wire"/>
+<text x="239" y="105" class="note">if_valid_q</text><text x="468" y="105" class="note">id_valid_q</text><text x="697" y="105" class="note">ex_valid_q</text><text x="926" y="105" class="note">wb_valid_q</text>
+<path d="M583 270V365H125V270" class="control"/><text x="354" y="345" class="note">taken branch or jump redirects fetch in EX</text>
+<path d="M812 270V413H354V270" class="control"/><text x="583" y="397" class="note">memory wait holds younger stages</text>
+<rect x="120" y="470" width="960" height="65" rx="8" class="reg"/><text x="600" y="495" class="name">Valid bits separate occupied stages from bubbles</text><text x="600" y="521" class="note">A fault discards younger work; older instructions retire before the trap record becomes sticky.</text>
 </svg>

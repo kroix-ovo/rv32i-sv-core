@@ -13,11 +13,11 @@
   <rect x="345" y="85" width="220" height="110" rx="10" class="check"/>
   <text x="455" y="122" class="name">Python ISA model</text><text x="455" y="151" class="note">Architectural instruction steps</text><text x="455" y="174" class="note">Expected retire stream</text>
   <rect x="345" y="260" width="220" height="120" rx="10" class="rtl"/>
-  <text x="455" y="298" class="name">RV32I RTL core</text><text x="455" y="327" class="note">FETCH - EXECUTE - MEMORY</text><text x="455" y="350" class="note">ready/valid native ports</text>
+  <text x="455" y="298" class="name">RV32I RTL core</text><text x="455" y="327" class="note">IF - ID - EX - MEM - WB</text><text x="455" y="350" class="note">ready/valid native ports</text>
   <rect x="655" y="250" width="225" height="130" rx="10" class="check"/>
   <text x="768" y="287" class="name">cocotb scoreboard</text><text x="768" y="316" class="note">Deterministic wait states</text><text x="768" y="339" class="note">PC + instruction comparison</text><text x="768" y="362" class="note">Trap and stability checks</text>
   <rect x="955" y="255" width="190" height="115" rx="10" class="artifact"/>
-  <text x="1050" y="292" class="name">FST waveform</text><text x="1050" y="321" class="note">GTKWave save groups</text><text x="1050" y="344" class="note">5.11 us captured</text>
+  <text x="1050" y="292" class="name">FST waveform</text><text x="1050" y="321" class="note">GTKWave save groups</text><text x="1050" y="344" class="note">pipeline stage activity</text>
 
   <rect x="345" y="475" width="220" height="105" rx="10" class="check"/>
   <text x="455" y="512" class="name">SV directed tests</text><text x="455" y="541" class="note">ALU, program signature, traps</text><text x="455" y="564" class="note">Icarus execution</text>
