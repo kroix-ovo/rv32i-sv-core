@@ -236,29 +236,3 @@ class rv32i_scoreboard extends uvm_scoreboard;
        raw_bins,load_use_bins,raw_stall_cycles,load_use_stall_cycles,memory_wait_cycles),UVM_LOW)
   endfunction
 endclass
-
-class rv32i_uvm_env extends uvm_env;
-  rv32i_memory memory;
-  rv32i_mem_agent imem, dmem;
-  rv32i_retire_monitor retirement;
-  rv32i_scoreboard scoreboard;
-  `uvm_component_utils(rv32i_uvm_env)
-  function new(string name,uvm_component parent); super.new(name,parent); endfunction
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    memory=rv32i_memory::type_id::create("memory");
-    uvm_config_db#(rv32i_memory)::set(this,"*","memory",memory);
-    uvm_config_db#(bit)::set(this,"imem.*","is_data",0);
-    uvm_config_db#(bit)::set(this,"dmem.*","is_data",1);
-    imem=rv32i_mem_agent::type_id::create("imem",this);
-    dmem=rv32i_mem_agent::type_id::create("dmem",this);
-    retirement=rv32i_retire_monitor::type_id::create("retirement",this);
-    scoreboard=rv32i_scoreboard::type_id::create("scoreboard",this);
-  endfunction
-  function void connect_phase(uvm_phase phase);
-    super.connect_phase(phase);
-    imem.monitor.ap.connect(scoreboard.analysis_export);
-    dmem.monitor.ap.connect(scoreboard.analysis_export);
-    retirement.ap.connect(scoreboard.analysis_export);
-  endfunction
-endclass
