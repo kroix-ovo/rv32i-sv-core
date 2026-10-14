@@ -1,5 +1,5 @@
 # Run one self-checking testbench in Vivado xsim.
-# Optional first argument: tb_alu, tb_core_directed, or tb_core_traps.
+# Optional first argument: tb_alu, tb_core_directed, tb_core_traps, tb_board_reset.
 # Example:
 #   vivado -mode batch -source scripts/vivado_sim.tcl -tclargs tb_core_traps
 
@@ -7,7 +7,7 @@ set script_dir [file dirname [file normalize [info script]]]
 set repo_dir [file dirname $script_dir]
 set test_top [expr {$argc > 0 ? [lindex $argv 0] : "tb_core_directed"}]
 
-if {$test_top ni {tb_alu tb_core_directed tb_core_traps}} {
+if {$test_top ni {tb_alu tb_core_directed tb_core_traps tb_board_reset tb_board_selftest}} {
   error "Unknown testbench '$test_top'"
 }
 
@@ -24,12 +24,16 @@ set rtl_files [list \
   [file join $repo_dir rtl rv32i_regfile.sv] \
   [file join $repo_dir rtl rv32i_decoder.sv] \
   [file join $repo_dir rtl rv32i_core.sv] \
-  [file join $repo_dir rtl rv32i_soc.sv]]
+  [file join $repo_dir rtl rv32i_soc.sv] \
+  [file join $repo_dir fpga arty_a7_100t_top.sv] \
+  [file join $repo_dir fpga nexys_a7_100t_top.sv] \
+  [file join $repo_dir fpga nexys_a7_selftest_top.sv]]
 
 add_files -norecurse $rtl_files
 add_files -fileset sim_1 -norecurse [file join $repo_dir tb ${test_top}.sv]
 add_files -fileset sim_1 -norecurse [file join $repo_dir tb rv32i_core_assertions.sv]
 add_files -norecurse [file join $repo_dir sim programs rv32i_directed.hex]
+add_files -norecurse [file join $repo_dir sim programs fpga_demo.hex]
 set_property top $test_top [get_filesets sim_1]
 set_property xsim.simulate.runtime all [get_filesets sim_1]
 update_compile_order -fileset sim_1
@@ -40,6 +44,23 @@ set xsim_dir [file join $sim_dir rv32i_sim_${test_top}.sim sim_1 behav xsim]
 file mkdir [file join $xsim_dir sim programs]
 file copy -force [file join $repo_dir sim programs rv32i_directed.hex] \
   [file join $xsim_dir sim programs rv32i_directed.hex]
+file copy -force [file join $repo_dir sim programs fpga_demo.hex] \
+  [file join $xsim_dir fpga_demo.hex]
+if {$test_top eq "tb_board_selftest"} {
+  set selftest_image [file join $repo_dir sim programs fpga_selftest.hex]
+  file copy -force $selftest_image [file join $xsim_dir fpga_selftest.hex]
+  set image_handle [open $selftest_image r]
+  set bad_words [split [string trim [read $image_handle]] "\n"]
+  close $image_handle
+  # Change ADDI x1,x0,5 to ADDI x1,x0,6; the first expected-value check must fail.
+  lset bad_words 0 00600093
+  set image_handle [open [file join $xsim_dir fpga_selftest_bad.hex] w]
+  puts $image_handle [join $bad_words "\n"]
+  close $image_handle
+  set image_handle [open [file join $xsim_dir fpga_selftest_trap.hex] w]
+  puts $image_handle 00100073
+  close $image_handle
+}
 
 launch_simulation -simset sim_1 -mode behavioral
 close_sim

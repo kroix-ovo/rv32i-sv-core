@@ -1,0 +1,351 @@
+
+*** Running vivado
+    with args -log nexys_a7_selftest_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source nexys_a7_selftest_top.tcl
+
+
+ECHO is off.
+ECHO is off.
+
+****** Vivado v2023.2 (64-bit)
+  **** SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+  **** IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+  **** SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source nexys_a7_selftest_top.tcl -notrace
+create_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 476.590 ; gain = 185.320
+Command: synth_design -top nexys_a7_selftest_top -part xc7a100tcsg324-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Device 21-403] Loading part xc7a100tcsg324-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 46064
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1324.609 ; gain = 439.707
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'nexys_a7_selftest_top' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_selftest_top.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'nexys_a7_100t_top' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_100t_top.sv:5]
+	Parameter MEM_INIT_FILE bound to: fpga_selftest.hex - type: string 
+	Parameter SELF_TEST bound to: 1'b1 
+INFO: [Synth 8-6157] synthesizing module 'arty_a7_100t_top' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/arty_a7_100t_top.sv:7]
+	Parameter MEM_INIT_FILE bound to: fpga_selftest.hex - type: string 
+	Parameter SELF_TEST bound to: 1'b1 
+INFO: [Synth 8-6157] synthesizing module 'rv32i_soc' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_soc.sv:10]
+	Parameter MEM_WORDS bound to: 4096 - type: integer 
+	Parameter MEM_INIT_FILE bound to: fpga_selftest.hex - type: string 
+INFO: [Synth 8-3876] $readmem data file 'fpga_selftest.hex' is read successfully [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_soc.sv:61]
+INFO: [Synth 8-6157] synthesizing module 'rv32i_core' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_core.sv:24]
+	Parameter RESET_PC bound to: 0 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'rv32i_decoder' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_decoder.sv:11]
+INFO: [Synth 8-226] default block is never used [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_decoder.sv:147]
+INFO: [Synth 8-6155] done synthesizing module 'rv32i_decoder' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_decoder.sv:11]
+INFO: [Synth 8-6157] synthesizing module 'rv32i_imm_gen' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_imm_gen.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'rv32i_imm_gen' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_imm_gen.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'rv32i_regfile' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_regfile.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'rv32i_regfile' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_regfile.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'rv32i_alu' [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_alu.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'rv32i_alu' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_alu.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'rv32i_core' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_core.sv:24]
+INFO: [Synth 8-6155] done synthesizing module 'rv32i_soc' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_soc.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'arty_a7_100t_top' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/arty_a7_100t_top.sv:7]
+INFO: [Synth 8-6155] done synthesizing module 'nexys_a7_100t_top' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_100t_top.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'nexys_a7_selftest_top' (0#1) [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_selftest_top.sv:5]
+WARNING: [Synth 8-7129] Port instruction_i[6] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[5] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[4] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[3] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[2] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[1] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[0] in module rv32i_imm_gen is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1447.969 ; gain = 563.066
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 1447.969 ; gain = 563.066
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 1447.969 ; gain = 563.066
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.035 . Memory (MB): peak = 1447.969 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_100t.xdc]
+Finished Parsing XDC File [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_100t.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_100t.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/nexys_a7_selftest_top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/nexys_a7_selftest_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1485.316 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+The system cannot find the path specified.
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.018 . Memory (MB): peak = 1485.316 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 1485.316 ; gain = 600.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a100tcsg324-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 1485.316 ; gain = 600.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 1485.316 ; gain = 600.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:17 ; elapsed = 00:00:17 . Memory (MB): peak = 1485.316 ; gain = 600.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input   32 Bit       Adders := 1     
+	   2 Input   32 Bit       Adders := 4     
++---XORs : 
+	   2 Input     32 Bit         XORs := 1     
++---Registers : 
+	               32 Bit    Registers := 60    
+	                5 Bit    Registers := 3     
+	                4 Bit    Registers := 2     
+	                3 Bit    Registers := 1     
+	                2 Bit    Registers := 4     
+	                1 Bit    Registers := 30    
++---RAMs : 
+	             128K Bit	(4096 X 32 bit)          RAMs := 1     
++---Muxes : 
+	  33 Input   32 Bit        Muxes := 2     
+	  11 Input   32 Bit        Muxes := 1     
+	   2 Input   32 Bit        Muxes := 26    
+	   4 Input   32 Bit        Muxes := 3     
+	   2 Input    8 Bit        Muxes := 1     
+	   8 Input    4 Bit        Muxes := 1     
+	  11 Input    4 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 5     
+	  12 Input    4 Bit        Muxes := 1     
+	   7 Input    4 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 2     
+	   3 Input    3 Bit        Muxes := 1     
+	  12 Input    3 Bit        Muxes := 2     
+	   7 Input    3 Bit        Muxes := 1     
+	   2 Input    2 Bit        Muxes := 5     
+	  12 Input    2 Bit        Muxes := 2     
+	   6 Input    2 Bit        Muxes := 1     
+	   4 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 56    
+	   7 Input    1 Bit        Muxes := 1     
+	   6 Input    1 Bit        Muxes := 2     
+	   4 Input    1 Bit        Muxes := 2     
+	  10 Input    1 Bit        Muxes := 1     
+	  12 Input    1 Bit        Muxes := 13    
+	   3 Input    1 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[15] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[14] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[13] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[12] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[11] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[10] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[9] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[8] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[7] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[6] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[5] driven by constant 0
+WARNING: [Synth 8-3917] design nexys_a7_selftest_top has port LED[4] driven by constant 0
+WARNING: [Synth 8-7129] Port instruction_i[6] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[5] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[4] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[3] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[2] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[1] in module rv32i_imm_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port instruction_i[0] in module rv32i_imm_gen is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:27 ; elapsed = 00:00:28 . Memory (MB): peak = 1485.316 ; gain = 600.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping Report (see note below)
++----------------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name           | RTL Object                      | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++----------------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|nexys_a7_selftest_top | u_board/u_demo/u_soc/memory_reg | 4 K x 32(READ_FIRST)   | W | R | 4 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 4      | 
++----------------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:32 ; elapsed = 00:00:34 . Memory (MB): peak = 1485.316 ; gain = 600.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:40 ; elapsed = 00:00:42 . Memory (MB): peak = 1617.938 ; gain = 733.035
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++----------------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name           | RTL Object                      | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++----------------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|nexys_a7_selftest_top | u_board/u_demo/u_soc/memory_reg | 4 K x 32(READ_FIRST)   | W | R | 4 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 4      | 
++----------------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_board/u_demo/u_soc/memory_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:41 ; elapsed = 00:00:43 . Memory (MB): peak = 1618.000 ; gain = 733.098
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:46 ; elapsed = 00:00:47 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:46 ; elapsed = 00:00:47 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |BUFG     |     1|
+|2     |CARRY4   |    73|
+|3     |LUT1     |     5|
+|4     |LUT2     |    83|
+|5     |LUT3     |    79|
+|6     |LUT4     |   249|
+|7     |LUT5     |   344|
+|8     |LUT6     |   987|
+|9     |MUXF7    |   279|
+|10    |RAMB36E1 |     4|
+|14    |FDCE     |  1494|
+|15    |FDPE     |     3|
+|16    |FDRE     |    66|
+|17    |IBUF     |     2|
+|18    |OBUF     |    16|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1626.730 ; gain = 741.828
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 20 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:36 ; elapsed = 00:00:45 . Memory (MB): peak = 1626.730 ; gain = 704.480
+Synthesis Optimization Complete : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1626.730 ; gain = 741.828
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.023 . Memory (MB): peak = 1638.746 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 356 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1638.746 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+The system cannot find the path specified.
+Synth Design complete | Checksum: 9ad065a7
+INFO: [Common 17-83] Releasing license: Synthesis
+43 Infos, 27 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:51 ; elapsed = 00:00:54 . Memory (MB): peak = 1638.746 ; gain = 1162.156
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 1638.746 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/synth_1/nexys_a7_selftest_top.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file nexys_a7_selftest_top_utilization_synth.rpt -pb nexys_a7_selftest_top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Tue Oct 13 20:54:27 2026...

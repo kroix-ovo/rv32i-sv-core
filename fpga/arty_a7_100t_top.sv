@@ -4,8 +4,11 @@
 // LED[0] is software GPIO, LED[1] reports a trap, LED[2] samples the PC, and
 // LED[3] is a hardware heartbeat independent of CPU progress.
 
-module arty_a7_100t_top (
-  // Digilent board clock, active-high reset button, and discrete LEDs.
+module arty_a7_100t_top #(
+  parameter MEM_INIT_FILE = "fpga_demo.hex",
+  parameter bit SELF_TEST = 1'b0
+) (
+  // Digilent board clock, active-low red reset button, and discrete LEDs.
   input  logic       CLK100MHZ,
   input  logic       ck_rst,
   output logic [3:0] led
@@ -21,8 +24,8 @@ module arty_a7_100t_top (
   logic [25:0] heartbeat_q;
 
   // Assert reset immediately. Release it only after two clean clock edges.
-  always_ff @(posedge CLK100MHZ or posedge ck_rst) begin
-    if (ck_rst)
+  always_ff @(posedge CLK100MHZ or negedge ck_rst) begin
+    if (!ck_rst)
       reset_sync_q <= 2'b00;
     else
       reset_sync_q <= {reset_sync_q[0], 1'b1};
@@ -38,7 +41,7 @@ module arty_a7_100t_top (
 
   rv32i_soc #(
     .MEM_WORDS     (4096),
-    .MEM_INIT_FILE ("fpga_demo.hex")
+    .MEM_INIT_FILE (MEM_INIT_FILE)
   ) u_soc (
     .clk_i          (CLK100MHZ),
     .rst_ni         (rst_n),
@@ -51,9 +54,15 @@ module arty_a7_100t_top (
   );
 
   always_comb begin
-    led[0] = gpio[0];
-    led[1] = trap_valid;
-    led[2] = debug_pc[4];
+    if (SELF_TEST) begin
+      led[0] = (gpio == 32'h600d600d) && !trap_valid;
+      led[1] = (gpio == 32'hbad00001) || trap_valid;
+      led[2] = (gpio == 32'h600d600d) || (gpio == 32'hbad00001) || trap_valid;
+    end else begin
+      led[0] = gpio[0];
+      led[1] = trap_valid;
+      led[2] = debug_pc[4];
+    end
     led[3] = heartbeat_q[25];
   end
 endmodule

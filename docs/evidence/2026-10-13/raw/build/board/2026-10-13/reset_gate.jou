@@ -1,0 +1,15 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Tue Oct 13 20:39:38 2026
+# Process ID: 73008
+# Current directory: C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core
+# Command line: vivado.exe -mode batch -log build/board/2026-10-13/reset_gate.log -journal build/board/2026-10-13/reset_gate.jou -source scripts/vivado_sim.tcl -tclargs tb_board_reset
+# Log file: C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/board/2026-10-13/reset_gate.log
+# Journal file: C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core\build/board/2026-10-13/reset_gate.jou
+# Running On: KroixLaptop, OS: Windows, CPU Frequency: 2304 MHz, CPU Physical cores: 8, Host memory: 34089 MB
+#-----------------------------------------------------------
+source scripts/vivado_sim.tcl
+source tb_board_reset.tcl

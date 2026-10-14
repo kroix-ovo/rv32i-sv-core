@@ -1,5 +1,50 @@
 # Vivado quick start
 
+## Nexys A7-100T
+
+Check the name printed on the PCB first. The connected board in the
+2026-10-13 session is a Nexys A7-100T, not an Arty. Both use an `xc7a100t`,
+so JTAG chip detection alone cannot select the correct board constraints.
+
+```powershell
+vivado -mode batch -source scripts/vivado_build.tcl -tclargs build/board/2026-10-13/nexys nexys
+vivado -mode batch -source scripts/vivado_program.tcl -tclargs build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/nexys_a7_100t_top.bit build/board/2026-10-13/nexys_device_status.txt
+```
+
+The Nexys target uses `fpga/nexys_a7_100t_top.sv` and
+`fpga/nexys_a7_100t.xdc`, with shared demo logic in `arty_a7_100t_top.sv`.
+Clock E3, active-low CPU RESET C12, and LD0–LD3 H17/K15/J13/N14 follow
+[Digilent's Nexys constraints](https://github.com/Digilent/digilent-xdc/blob/master/Nexys-A7-100T-Master.xdc).
+LD0 should blink under software control, LD1 should stay off, LD2 reflects
+the PC, and LD3 should blink independently of the CPU. LD4–LD15 are off.
+Hold **CPU RESET**, not the configuration/PROG button, to reset all four
+status LEDs. Release it to restart the demo.
+
+### Nexys directed self-test
+
+Generate the programs, then select `selftest` as the third build argument:
+
+```powershell
+python sim/build_programs.py
+vivado -mode batch -source scripts/vivado_sim.tcl -tclargs tb_board_selftest
+vivado -mode batch -source scripts/vivado_build.tcl -tclargs build/board/2026-10-13/selftest nexys selftest
+vivado -mode batch -source scripts/vivado_program.tcl -tclargs build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/impl_1/nexys_a7_selftest_top.bit build/board/2026-10-13/selftest_device_status.txt
+```
+
+This runs the directed test with its result written to the GPIO register:
+`0x600d600d` for pass, `0xbad00001` for a failed comparison.
+LD0 is steady on for pass; LD1 is on for a failed comparison or CPU trap;
+LD2 is on once pass, fail, or trap is reported; LD3 remains the independent
+heartbeat. LD4–LD15 stay off. CPU RESET clears the status and reruns the test.
+
+The expected passing pattern is LD0 on, LD1 off, LD2 on, LD3 blinking.
+The simulation gate also checks an intentionally corrupted arithmetic
+instruction and an EBREAK image, ensuring both show failure, and repeats
+all three paths through five resets. Those injected failures are simulation
+evidence; the normal board image tests the successful directed sequence.
+
+## Arty A7-100T
+
 These instructions target the Digilent Arty A7-100T, part `xc7a100tcsg324-1`. You can still simulate `rv32i_core` without that board.
 
 The tested setup used Vivado 2023.2 on Windows. Vivado is installed here at
@@ -43,8 +88,26 @@ fails, even when Vivado writes a bitstream.
 8. Generate the bitstream and program the device.
 
 Press the Arty reset button if the demo does not start immediately. LED 0 should blink. LED 1 should remain off. LED 3 gives a slower hardware heartbeat even if software traps.
-This LED behavior is a simulation-based expectation; it has not yet been
-observed on the physical board.
+The red RESET button on C2 is active-low. Holding it should turn all four
+discrete LEDs off; releasing it restarts the demo after reset synchronization.
+Physical observations and programming evidence are tracked in
+[the 2026-10-13 board-test record](board_test_2026-10-13.md).
+
+To preserve prior builds, pass a separate output directory:
+
+```powershell
+vivado -mode batch -source scripts/vivado_build.tcl -tclargs build/board/2026-10-13/demo
+```
+
+Program the connected FPGA's volatile configuration and save its status:
+
+```powershell
+vivado -mode batch -source scripts/vivado_program.tcl -tclargs build/board/2026-10-13/demo/rv32i_arty_a7.runs/impl_1/arty_a7_100t_top.bit build/board/2026-10-13/device_status.txt
+```
+
+The programming script requires exactly one target and one `xc7a100t` device.
+It does not program the board's configuration flash. Successful configuration
+still requires LED and reset observations to establish the physical smoke test.
 
 ## Behavioral simulation
 
@@ -54,7 +117,9 @@ The supplied Tcl script accepts one testbench name:
 vivado -mode batch -source scripts/vivado_sim.tcl -tclargs tb_core_directed
 ```
 
-Valid names are `tb_alu`, `tb_core_directed`, and `tb_core_traps`.
+Valid names are `tb_alu`, `tb_core_directed`, `tb_core_traps`, and
+`tb_board_reset`. The board-reset bench checks polarity, synchronized release,
+software GPIO startup, and restart; it remains a simulation test.
 
 For a manual xsim project, set the simulation top to one testbench at a time. Keep `rtl/rv32i_pkg.sv` first in compile order. The concurrent assertion file is optional and is not needed by the three basic tests.
 

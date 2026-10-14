@@ -1,0 +1,57 @@
+[
+  {
+    "Algorithm": "SHA256",
+    "Hash": "C0D1817CBF83A3685BB2C36BB9A2BB4D2F6163C70474C24F0078E405960A15F4",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_alu.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "BD2F73927BEC5A7A34F21FAE3BEAFBB68D5B77294A2D0AB4BFB3C6E4E4F1BEBC",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_core.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "506C0318894BB62132315774C0F8822596B1C6A45EC5CA74BDAA4D2477770152",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_decoder.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "1D7F18D2D75AEA37BA51D149A4F46766F45E29882EDAA1BA24A3A9998DAE299F",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_imm_gen.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "6ACD1BEA0A55D6C47DD79EBD3E13B32971D9243DC6BA901A91FF484184342070",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_pkg.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "CF9E280B515904E24568AC8D0B7BEB34D92FC38335F616626E22DD1341C31669",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_regfile.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "BC82E47AB1747DF78EA45EAD95ADF9EF1EB1FF5877FF60AA43952FF58A85150B",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\rtl\\rv32i_soc.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "C177C23428AAB24FB104B1CF6539415646A04F9A5B6D9E20630A9754CEF9FF6C",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\fpga\\arty_a7_100t_top.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "5312BA361A9C472E770D0F147FF3259CC24503032B02706B4FAC36F913BBF7E4",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\fpga\\nexys_a7_100t_top.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "8C47F93285FBBDEEF957A5A270D22D8D48FA34A2445EF5A814659E4B03E29E16",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\fpga\\nexys_a7_100t.xdc"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "4EB429C46C0FB57F099A374733EFC6E4D2E79897BF818114E2349CFB28493B45",
+    "Path": "C:\\Users\\Symok\\Documents\\hardware-projects\\rv32i_sv_core\\sim\\programs\\fpga_demo.hex"
+  }
+]

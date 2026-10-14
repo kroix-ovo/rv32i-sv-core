@@ -1,0 +1,339 @@
+[
+  {
+    "path": "raw/build/board/2026-10-13/bitstream_hash.json",
+    "original_path": "build/board/2026-10-13/bitstream_hash.json",
+    "bytes": 268,
+    "sha256": "dea081948811087494e30a37405e912e2eaeea8f0301b12d347d44cfcb77e25e"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/device_status.txt",
+    "original_path": "build/board/2026-10-13/device_status.txt",
+    "bytes": 3913,
+    "sha256": "db501d6d76fc01c68eaaf6cc413228d6316322b5fbd6a7fec3ed4945b81196c6"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_bitstream_hash.json",
+    "original_path": "build/board/2026-10-13/nexys_bitstream_hash.json",
+    "bytes": 271,
+    "sha256": "24bb7726acf63ef29f46bc9ef78b672271201c378726a7fff36ba89699fe6f87"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_build.jou",
+    "original_path": "build/board/2026-10-13/nexys_build.jou",
+    "bytes": 1025,
+    "sha256": "d1326dddc1f8831b5b57c9a1d603fa406ee75ceefdc1c7109b3d1ce678d5b89b"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_build.log",
+    "original_path": "build/board/2026-10-13/nexys_build.log",
+    "bytes": 95058,
+    "sha256": "80b8b58990c612e575b6537a440bb9d64966d720587c98e7a54e13c6d86204ee"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_device_status.txt",
+    "original_path": "build/board/2026-10-13/nexys_device_status.txt",
+    "bytes": 3916,
+    "sha256": "da04465cbd953bc8c5f9e387374ddd161be4d2c625e56ea8b90d3a8dcbcc48ee"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_program.jou",
+    "original_path": "build/board/2026-10-13/nexys_program.jou",
+    "bytes": 1141,
+    "sha256": "3d957f23ef67af09d0af82c49af183e7ed19cc9339c40f882ca1deea9019ea64"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_program.log",
+    "original_path": "build/board/2026-10-13/nexys_program.log",
+    "bytes": 4174,
+    "sha256": "462c9d3f1f6d4bd0188b0a6c31839e1ef9306b4c7fc9c3f55d0609c23868720b"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_reset_gate.jou",
+    "original_path": "build/board/2026-10-13/nexys_reset_gate.jou",
+    "bytes": 1047,
+    "sha256": "92c52553d1ed3ca0ed047fd8342204381007823ad7fe10c35899f95fd9a2cb14"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_reset_gate.log",
+    "original_path": "build/board/2026-10-13/nexys_reset_gate.log",
+    "bytes": 10532,
+    "sha256": "15a59721d33069048dc480d5bcbc8cd1c44d4fd0a5b62cc7eb301cb2f9ae6254"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys_source_hashes.json",
+    "original_path": "build/board/2026-10-13/nexys_source_hashes.json",
+    "bytes": 2428,
+    "sha256": "cf4bb3166b1e01650429cd46ee6f319b75ce6cea9bce0f952aa9342a13af4acd"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/probe.jou",
+    "original_path": "build/board/2026-10-13/probe.jou",
+    "bytes": 973,
+    "sha256": "bbf22af00657a5e2c8415ad5f76d4706ba270839eaaf57e931920e07cadbe516"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/probe.log",
+    "original_path": "build/board/2026-10-13/probe.log",
+    "bytes": 2671,
+    "sha256": "13cb3a099e2016de158b4bd60454f917fbfb544e5aada4b8019733a66ba0ffa5"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/probe.tcl",
+    "original_path": "build/board/2026-10-13/probe.tcl",
+    "bytes": 314,
+    "sha256": "d38fb5ec99afac7665734537ff7de6bd1980b991b4d1f25c7fc9bdbc8e6c89eb"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/program.jou",
+    "original_path": "build/board/2026-10-13/program.jou",
+    "bytes": 1108,
+    "sha256": "a777fa1dcb3d5b5b30a2bc4555b8fc8166d2f11c94527dc2f330ef9298592124"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/program.log",
+    "original_path": "build/board/2026-10-13/program.log",
+    "bytes": 4135,
+    "sha256": "9f6f546a97cafce0f605ae3d3179d9cb474f23a4ccb062ba48e1df54617076a2"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/reset_gate.jou",
+    "original_path": "build/board/2026-10-13/reset_gate.jou",
+    "bytes": 1023,
+    "sha256": "8bf0cebbb8b967d65d7359eac374a05f120a5dc90fd7ce6ea885c6b88c8e4579"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/reset_gate.log",
+    "original_path": "build/board/2026-10-13/reset_gate.log",
+    "bytes": 10183,
+    "sha256": "db2a7974e7eef6fd4833c47f685d70d6c83d71317df72a0ea3ed109fcc9bf534"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/retry_device_status.txt",
+    "original_path": "build/board/2026-10-13/retry_device_status.txt",
+    "bytes": 3913,
+    "sha256": "db501d6d76fc01c68eaaf6cc413228d6316322b5fbd6a7fec3ed4945b81196c6"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/retry_program.jou",
+    "original_path": "build/board/2026-10-13/retry_program.jou",
+    "bytes": 1138,
+    "sha256": "51f62bcd78d4955c379ab887886b2690dbfce64250917f62195595fcee34553d"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/retry_program.log",
+    "original_path": "build/board/2026-10-13/retry_program.log",
+    "bytes": 4171,
+    "sha256": "e3af8c1be3d0f66dc2957f6c379535f531ea760edf93807d1233ae2d77299475"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_bitstream_hash.json",
+    "original_path": "build/board/2026-10-13/selftest_bitstream_hash.json",
+    "bytes": 278,
+    "sha256": "3daea6666320965497fe517a2f67e2b7235aabe458d7d70a66930bc3cdd52227"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_build.jou",
+    "original_path": "build/board/2026-10-13/selftest_build.jou",
+    "bytes": 1049,
+    "sha256": "04daa4d48c4ec02f4d0e0ec1b13c15425254bfc819a65b598145ec097b47d204"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_build.log",
+    "original_path": "build/board/2026-10-13/selftest_build.log",
+    "bytes": 96424,
+    "sha256": "c6af69b3d8348249d350a25f1141eb9eb3fc0d28d9071de79d295565e4dbbc6d"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_device_status.txt",
+    "original_path": "build/board/2026-10-13/selftest_device_status.txt",
+    "bytes": 3923,
+    "sha256": "c53fa64db5313188b1e53017521b97dfa018f031dd52ec58f0b912b7ad4048ed"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_program.jou",
+    "original_path": "build/board/2026-10-13/selftest_program.jou",
+    "bytes": 1163,
+    "sha256": "123c324a964bb280ff7626dcff1f772b1bc22e2104a04a763b2dc0269ad913e3"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_program.log",
+    "original_path": "build/board/2026-10-13/selftest_program.log",
+    "bytes": 4199,
+    "sha256": "742144e11ee4561a0332f80ea3c08ee610fce04a1c647dc895a7929ea9260444"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_sim.jou",
+    "original_path": "build/board/2026-10-13/selftest_sim.jou",
+    "bytes": 1036,
+    "sha256": "cb79d7f1da5dde3b1fc658cd4dc132f96b6825af8a978963b7c7b810fce4f17b"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_sim.log",
+    "original_path": "build/board/2026-10-13/selftest_sim.log",
+    "bytes": 12154,
+    "sha256": "ebaabded0a3406ba5176e64c956252e3dea75ce1e19215d7cbf06da03c3193f0"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest_source_hashes.json",
+    "original_path": "build/board/2026-10-13/selftest_source_hashes.json",
+    "bytes": 2661,
+    "sha256": "69204cead4a9531adb57ac66690b4c07c20065abb629fc6f719cac59b000e9de"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/source_hashes.json",
+    "original_path": "build/board/2026-10-13/source_hashes.json",
+    "bytes": 2202,
+    "sha256": "ca4c634fa75cb1e8f8c104a7bf830435a31c1db0ab8d73df853351054b0b4ba2"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/reset_sim/xsim.log",
+    "original_path": "build/board/2026-10-13/reset_sim/xsim.log",
+    "bytes": 1300,
+    "sha256": "5718cfc9c3c42dc002f51fb4252beb6bfee74554bf3d38b9bf164edd567a4ed6"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/reports/post_route_timing.rpt",
+    "original_path": "build/board/2026-10-13/demo/reports/post_route_timing.rpt",
+    "bytes": 30463,
+    "sha256": "f8f58b8b955e841a23a8c807b09f8c05528955d31754176a0b8ed69bbe516662"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/reports/post_route_utilization.rpt",
+    "original_path": "build/board/2026-10-13/demo/reports/post_route_utilization.rpt",
+    "bytes": 10449,
+    "sha256": "3959e55b1695c3d2665ca418e1e0823b49279027b84e6054ac2052ae1d742fb0"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/reports/post_synth_timing.rpt",
+    "original_path": "build/board/2026-10-13/demo/reports/post_synth_timing.rpt",
+    "bytes": 30182,
+    "sha256": "d8f776293ab4897d43b096f3b3278138e2f8f40b71d4b4b82f1949d928cb8bc6"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/reports/post_synth_utilization.rpt",
+    "original_path": "build/board/2026-10-13/demo/reports/post_synth_utilization.rpt",
+    "bytes": 8520,
+    "sha256": "3a827e51a6e95cf8124e0ed8107e776e0b3186287028f79143c4bf4e3cb3a39f"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/rv32i_arty_a7.runs/synth_1/runme.log",
+    "original_path": "build/board/2026-10-13/demo/rv32i_arty_a7.runs/synth_1/runme.log",
+    "bytes": 25950,
+    "sha256": "0557b464e0a9d8171f98dd73605051611d6336e54096cfbb8e00afda46a04ec3"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/rv32i_arty_a7.runs/impl_1/runme.log",
+    "original_path": "build/board/2026-10-13/demo/rv32i_arty_a7.runs/impl_1/runme.log",
+    "bytes": 56724,
+    "sha256": "2b27fd2b6213541266554b19e96c78202d436440c936288f72877bbc6edb395c"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/demo/rv32i_arty_a7.runs/impl_1/arty_a7_100t_top_drc_routed.rpt",
+    "original_path": "build/board/2026-10-13/demo/rv32i_arty_a7.runs/impl_1/arty_a7_100t_top_drc_routed.rpt",
+    "bytes": 16793,
+    "sha256": "60063f294ed98cfe2846c6ff4850b1f1a27edbd1f175d807a5e11bad4828015b"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/reports/post_route_timing.rpt",
+    "original_path": "build/board/2026-10-13/nexys/reports/post_route_timing.rpt",
+    "bytes": 30896,
+    "sha256": "7e64255071fde263ee980f68ade775e12725752edda33ca74455edcb2087661f"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/reports/post_route_utilization.rpt",
+    "original_path": "build/board/2026-10-13/nexys/reports/post_route_utilization.rpt",
+    "bytes": 10453,
+    "sha256": "b1103f86ba9c855bbab38a0d4b7ba76127c5636225e1e8df9335274caf6f2562"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/reports/post_synth_timing.rpt",
+    "original_path": "build/board/2026-10-13/nexys/reports/post_synth_timing.rpt",
+    "bytes": 30666,
+    "sha256": "24b02fbda9fa15d3e66dce59566702e2a7d06c45f2164574b3eef87eaf9feb0a"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/reports/post_synth_utilization.rpt",
+    "original_path": "build/board/2026-10-13/nexys/reports/post_synth_utilization.rpt",
+    "bytes": 8524,
+    "sha256": "c1f4106aaacbb8153013b92e074eacb488d6d520a2736f8750c4854e43f8dcaf"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/synth_1/runme.log",
+    "original_path": "build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/synth_1/runme.log",
+    "bytes": 28510,
+    "sha256": "3451e67fac45d72714743bffd571e8469b07370d72ff6ba1db8a017bea9e161a"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/runme.log",
+    "original_path": "build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/runme.log",
+    "bytes": 57657,
+    "sha256": "50afad492a56d31cc19c97f2b4e8d5861733c2946b9ef109699ec6bb5f7dba00"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/nexys_a7_100t_top_drc_routed.rpt",
+    "original_path": "build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/nexys_a7_100t_top_drc_routed.rpt",
+    "bytes": 17386,
+    "sha256": "7b7777ec0befddb6ab2330a28f6d5d02297b33751b7910ab0904d319e7907946"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/reports/post_route_timing.rpt",
+    "original_path": "build/board/2026-10-13/selftest/reports/post_route_timing.rpt",
+    "bytes": 30692,
+    "sha256": "ac5146837c8a559b0232af398fe8b128e9e9a85e719a162e5f15a555b307a6ed"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/reports/post_route_utilization.rpt",
+    "original_path": "build/board/2026-10-13/selftest/reports/post_route_utilization.rpt",
+    "bytes": 10466,
+    "sha256": "38269240bb1b782eeab1d8c7c6970964a28262b7802e118bdb7fd9f479b98a64"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/reports/post_synth_timing.rpt",
+    "original_path": "build/board/2026-10-13/selftest/reports/post_synth_timing.rpt",
+    "bytes": 31467,
+    "sha256": "27f238ffa58a5f7f1326d300ed5612aa2f24b77e706102ce08b4f1340a22077f"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/reports/post_synth_utilization.rpt",
+    "original_path": "build/board/2026-10-13/selftest/reports/post_synth_utilization.rpt",
+    "bytes": 8537,
+    "sha256": "291c4b0cf884fee4bb28f922da264c509b5c558cb99c69a0e864d916fd188efc"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/synth_1/runme.log",
+    "original_path": "build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/synth_1/runme.log",
+    "bytes": 28280,
+    "sha256": "0b3e570f8e7e33b08c29ecc245368c3327c325047e3379482e39034f53e120a1"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/impl_1/runme.log",
+    "original_path": "build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/impl_1/runme.log",
+    "bytes": 58789,
+    "sha256": "509d2fa612bcf5b768edbb597892a84922075ccb08610909dde930788f7e6575"
+  },
+  {
+    "path": "raw/build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/impl_1/nexys_a7_selftest_top_drc_routed.rpt",
+    "original_path": "build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/impl_1/nexys_a7_selftest_top_drc_routed.rpt",
+    "bytes": 18102,
+    "sha256": "68ff8d611ddc1028c66c82db3517300e5174f681d86bbd76870c75a05fff3cb8"
+  },
+  {
+    "path": "tested_bitstreams.zip",
+    "bytes": 224726,
+    "sha256": "cb59f2386d30000d6613109c7c67b4960850eb6206b05056093eaa2d93cabdd5",
+    "members": [
+      {
+        "path": "build/board/2026-10-13/demo/rv32i_arty_a7.runs/impl_1/arty_a7_100t_top.bit",
+        "sha256": "b266c33b18fc3f87b5f37f8f2154a55b6e03f959263649007e9be1eedf00c43b"
+      },
+      {
+        "path": "build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/nexys_a7_100t_top.bit",
+        "sha256": "f922e9413e036238b53314d24926b12a0d57e7b2506ab459bc754e0c7f149808"
+      },
+      {
+        "path": "build/board/2026-10-13/selftest/rv32i_nexys_a7.runs/impl_1/nexys_a7_selftest_top.bit",
+        "sha256": "fb712ca90404ea1bc4f6d062ff28901aa51573cdd2f2f4e761f57c6937a6338d"
+      }
+    ]
+  }
+]

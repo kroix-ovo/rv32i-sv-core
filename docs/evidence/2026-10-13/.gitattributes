@@ -1,0 +1,3 @@
+# Preserve captured evidence byte-for-byte so manifest hashes survive checkout.
+raw/** -text
+tested_bitstreams.zip -text

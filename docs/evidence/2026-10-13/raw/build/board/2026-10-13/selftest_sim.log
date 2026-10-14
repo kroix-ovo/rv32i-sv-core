@@ -1,0 +1,172 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Tue Oct 13 20:53:56 2026
+# Process ID: 2092
+# Current directory: C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core
+# Command line: vivado.exe -mode batch -log build/board/2026-10-13/selftest_sim.log -journal build/board/2026-10-13/selftest_sim.jou -source scripts/vivado_sim.tcl -tclargs tb_board_selftest
+# Log file: C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/board/2026-10-13/selftest_sim.log
+# Journal file: C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core\build/board/2026-10-13/selftest_sim.jou
+# Running On: KroixLaptop, OS: Windows, CPU Frequency: 2304 MHz, CPU Physical cores: 8, Host memory: 34089 MB
+#-----------------------------------------------------------
+source scripts/vivado_sim.tcl
+# set script_dir [file dirname [file normalize [info script]]]
+# set repo_dir [file dirname $script_dir]
+# set test_top [expr {$argc > 0 ? [lindex $argv 0] : "tb_core_directed"}]
+# if {$test_top ni {tb_alu tb_core_directed tb_core_traps tb_board_reset tb_board_selftest}} {
+#   error "Unknown testbench '$test_top'"
+# }
+# set sim_dir [file join $repo_dir build vivado_sim $test_top]
+# file mkdir $sim_dir
+# create_project -force rv32i_sim_$test_top $sim_dir -part xc7a100tcsg324-1
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/vivado_sim/tb_board_selftest'
+create_project: Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 475.766 ; gain = 182.305
+# set rtl_files [list \
+#   [file join $repo_dir rtl rv32i_pkg.sv] \
+#   [file join $repo_dir rtl rv32i_alu.sv] \
+#   [file join $repo_dir rtl rv32i_imm_gen.sv] \
+#   [file join $repo_dir rtl rv32i_regfile.sv] \
+#   [file join $repo_dir rtl rv32i_decoder.sv] \
+#   [file join $repo_dir rtl rv32i_core.sv] \
+#   [file join $repo_dir rtl rv32i_soc.sv] \
+#   [file join $repo_dir fpga arty_a7_100t_top.sv] \
+#   [file join $repo_dir fpga nexys_a7_100t_top.sv] \
+#   [file join $repo_dir fpga nexys_a7_selftest_top.sv]]
+# add_files -norecurse $rtl_files
+# add_files -fileset sim_1 -norecurse [file join $repo_dir tb ${test_top}.sv]
+# add_files -fileset sim_1 -norecurse [file join $repo_dir tb rv32i_core_assertions.sv]
+# add_files -norecurse [file join $repo_dir sim programs rv32i_directed.hex]
+# add_files -norecurse [file join $repo_dir sim programs fpga_demo.hex]
+# set_property top $test_top [get_filesets sim_1]
+# set_property xsim.simulate.runtime all [get_filesets sim_1]
+# update_compile_order -fileset sim_1
+# set xsim_dir [file join $sim_dir rv32i_sim_${test_top}.sim sim_1 behav xsim]
+# file mkdir [file join $xsim_dir sim programs]
+# file copy -force [file join $repo_dir sim programs rv32i_directed.hex] \
+#   [file join $xsim_dir sim programs rv32i_directed.hex]
+# file copy -force [file join $repo_dir sim programs fpga_demo.hex] \
+#   [file join $xsim_dir fpga_demo.hex]
+# if {$test_top eq "tb_board_selftest"} {
+#   set selftest_image [file join $repo_dir sim programs fpga_selftest.hex]
+#   file copy -force $selftest_image [file join $xsim_dir fpga_selftest.hex]
+#   set image_handle [open $selftest_image r]
+#   set bad_words [split [string trim [read $image_handle]] "\n"]
+#   close $image_handle
+#   # Change ADDI x1,x0,5 to ADDI x1,x0,6; the first expected-value check must fail.
+#   lset bad_words 0 00600093
+#   set image_handle [open [file join $xsim_dir fpga_selftest_bad.hex] w]
+#   puts $image_handle [join $bad_words "\n"]
+#   close $image_handle
+#   set image_handle [open [file join $xsim_dir fpga_selftest_trap.hex] w]
+#   puts $image_handle 00100073
+#   close $image_handle
+# }
+# launch_simulation -simset sim_1 -mode behavioral
+Command: launch_simulation  -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_board_selftest'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/vivado_sim/tb_board_selftest/rv32i_sim_tb_board_selftest.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/Vivado/2023.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'tb_board_selftest' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/vivado_sim/tb_board_selftest/rv32i_sim_tb_board_selftest.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L uvm -prj tb_board_selftest_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/arty_a7_100t_top.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module arty_a7_100t_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_100t_top.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module nexys_a7_100t_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/fpga/nexys_a7_selftest_top.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module nexys_a7_selftest_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_pkg.sv" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_alu.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_alu
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_core.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_core
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/tb/rv32i_core_assertions.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_core_assertions
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_decoder.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_decoder
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_imm_gen.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_imm_gen
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_regfile.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_regfile
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/rtl/rv32i_soc.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rv32i_soc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/tb/tb_board_selftest.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_board_selftest
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/vivado_sim/tb_board_selftest/rv32i_sim_tb_board_selftest.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/vivado_sim/tb_board_selftest/rv32i_sim_tb_board_selftest.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_board_selftest_behav xil_defaultlib.tb_board_selftest xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_board_selftest_behav xil_defaultlib.tb_board_selftest xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package xil_defaultlib.rv32i_pkg
+Compiling module xil_defaultlib.rv32i_decoder
+Compiling module xil_defaultlib.rv32i_imm_gen
+Compiling module xil_defaultlib.rv32i_regfile
+Compiling module xil_defaultlib.rv32i_alu
+Compiling module xil_defaultlib.rv32i_core_assertions
+Compiling module xil_defaultlib.rv32i_core
+Compiling module xil_defaultlib.rv32i_soc(MEM_INIT_FILE="fpga_se...
+Compiling module xil_defaultlib.arty_a7_100t_top(MEM_INIT_FILE="...
+Compiling module xil_defaultlib.nexys_a7_100t_top(MEM_INIT_FILE=...
+Compiling module xil_defaultlib.nexys_a7_selftest_top
+Compiling module xil_defaultlib.rv32i_soc(MEM_INIT_FILE="fpga_se...
+Compiling module xil_defaultlib.arty_a7_100t_top(MEM_INIT_FILE="...
+Compiling module xil_defaultlib.nexys_a7_100t_top(MEM_INIT_FILE=...
+Compiling module xil_defaultlib.rv32i_soc(MEM_INIT_FILE="fpga_se...
+Compiling module xil_defaultlib.arty_a7_100t_top(MEM_INIT_FILE="...
+Compiling module xil_defaultlib.nexys_a7_100t_top(MEM_INIT_FILE=...
+Compiling module xil_defaultlib.tb_board_selftest
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_board_selftest_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '5' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/build/vivado_sim/tb_board_selftest/rv32i_sim_tb_board_selftest.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "tb_board_selftest_behav -key {Behavioral:sim_1:Functional:tb_board_selftest} -tclbatch {tb_board_selftest.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source tb_board_selftest.tcl
+## current_wave_config
+PASS: board self-test pass, injected comparison failure, EBREAK trap, five reset/retests
+$finish called at time : 100150 ns : File "C:/Users/Symok/Documents/hardware-projects/rv32i_sv_core/tb/tb_board_selftest.sv" Line 32
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'tb_board_selftest_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for all
+launch_simulation: Time (s): cpu = 00:00:00 ; elapsed = 00:00:10 . Memory (MB): peak = 495.020 ; gain = 19.254
+# close_sim
+INFO: [Simtcl 6-16] Simulation closed
+# set simulation_log [file join $xsim_dir simulate.log]
+# if {![file exists $simulation_log]} {
+#   error "Simulation log was not created: $simulation_log"
+# }
+# set log_file [open $simulation_log r]
+# set log_text [read $log_file]
+# close $log_file
+# if {[regexp {Fatal:|ERROR:} $log_text] || ![regexp {PASS:} $log_text]} {
+#   error "Simulation $test_top did not pass; inspect $simulation_log"
+# }
+# puts "PASS: Vivado xsim $test_top"
+PASS: Vivado xsim tb_board_selftest
+INFO: [Common 17-206] Exiting Vivado at Tue Oct 13 20:54:20 2026...

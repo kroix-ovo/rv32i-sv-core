@@ -77,7 +77,7 @@ class Program:
         return self.words
 
 
-def build_directed() -> list[int]:
+def build_directed(*, signature_gpio: bool = False) -> list[int]:
     p = Program()
 
     def check(register: int, expected: int) -> None:
@@ -178,14 +178,20 @@ def build_directed() -> list[int]:
     check(12, jalr_pc + 4)
 
     p.emit(rv.FENCE)
+    if signature_gpio:
+        p.li(31, 0x1000_0000)
     p.li(30, 0x600D_600D)
-    p.emit(rv.store(30, 20, 0x100, 0b010))
+    p.emit(rv.store(30, 31 if signature_gpio else 20,
+                    0 if signature_gpio else 0x100, 0b010))
     p.label("pass_loop")
     p.jal(0, "pass_loop")
 
     p.label("fail")
+    if signature_gpio:
+        p.li(31, 0x1000_0000)
     p.li(30, 0xBAD0_0001)
-    p.emit(rv.store(30, 20, 0x100, 0b010))
+    p.emit(rv.store(30, 31 if signature_gpio else 20,
+                    0 if signature_gpio else 0x100, 0b010))
     p.label("fail_loop")
     p.jal(0, "fail_loop")
     return p.resolve()
@@ -214,4 +220,5 @@ def write_hex(path: Path, words: list[int]) -> None:
 if __name__ == "__main__":
     write_hex(ROOT / "sim/programs/rv32i_directed.hex", build_directed())
     write_hex(ROOT / "sim/programs/fpga_demo.hex", build_fpga_demo())
-    print("Wrote directed CPU test and FPGA LED demo hex files.")
+    write_hex(ROOT / "sim/programs/fpga_selftest.hex", build_directed(signature_gpio=True))
+    print("Wrote directed CPU test, FPGA LED demo, and FPGA self-test hex files.")

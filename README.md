@@ -1,6 +1,11 @@
 # RV32I SystemVerilog CPU core
 
-This repository contains a small 32-bit RISC-V processor written for learning, simulation, and FPGA work. It implements the unprivileged RV32I base instruction set with separate instruction and data memory ports. Vivado 2023.2 has simulated, synthesized, and routed the pipeline for the Arty A7-100T; the board itself has not been tested.
+This repository contains a small 32-bit RISC-V processor written for learning, simulation, and FPGA work. It implements the unprivileged RV32I base instruction set with separate instruction and data memory ports. Vivado 2023.2 has simulated, synthesized, and routed the pipeline for the Arty A7-100T. On 2026-10-13, the Nexys A7-100T passed a physical software-LED, heartbeat, and reset/restart smoke test based on user observations. See [the board-test record](docs/board_test_2026-10-13.md) for the evidence and coverage limits.
+
+The Nexys also passed the directed RV32I program on board, with the exact
+pass-signature LED indication returning after all five CPU RESET trials.
+This covers the program's arithmetic, memory, branch, and jump checks;
+physical trap scenarios and measured performance remain untested.
 
 The core now uses five in-order stages: IF, ID, EX, MEM, and WB. Valid bits carry instructions between stages. Register dependencies and memory waits stall younger instructions; branches resolve in EX, and faults drain older work before the trap becomes visible. See [docs/pipeline.md](docs/pipeline.md) for the current stage contract.
 
@@ -21,7 +26,7 @@ For a deeper design review, open the [interactive architecture map](docs/archify
 - Ready/valid instruction and data interfaces with wait-state support
 - Traps for illegal instructions, alignment errors, access faults, `ECALL`, and `EBREAK`
 - A small memory and GPIO wrapper for simulation or FPGA use
-- An Arty A7-100T top module, constraints, LED program, and Vivado batch scripts
+- Arty and Nexys A7-100T top modules, constraints, LED program, and Vivado batch scripts
 - Directed tests, trap tests, assertions, a Python encoder, and an independent RV32I reference model
 
 This is an unprivileged core. It does not contain machine-mode CSRs, interrupts, caches, an MMU, multiplication, division, or compressed instructions. The trap outputs let a surrounding system see why execution stopped, but there is no hardware trap handler or `MRET` instruction.
@@ -98,6 +103,20 @@ The directed program writes `0x600d600d` to address `0x00000900` when every chec
 
 ## Vivado and the Arty A7-100T
 
+Confirm the PCB model before selecting constraints. The connected board for
+the 2026-10-13 session is a **Nexys A7-100T**, which uses different reset and
+LED pins. Build its image with:
+
+```powershell
+vivado -mode batch -source scripts/vivado_build.tcl -tclargs build/board/2026-10-13/nexys nexys
+```
+
+Its bitstream is `build/board/2026-10-13/nexys/rv32i_nexys_a7.runs/impl_1/nexys_a7_100t_top.bit`.
+LD0 is software GPIO, LD1 reports a trap, LD2 follows PC bit 4, and LD3 is a
+hardware heartbeat. The CPU RESET button is active-low. LD4–LD15 are held off.
+
+The following default procedure is for the Arty board.
+
 Generate the FPGA demo image, then run the batch build from the repository root:
 
 ```powershell
@@ -107,7 +126,7 @@ vivado -mode batch -source scripts/vivado_build.tcl
 
 The finished bitstream is written under `build/vivado/rv32i_arty_a7.runs/impl_1/`. LED 0 blinks under software control. LED 1 reports a trap, LED 2 follows a program-counter bit, and LED 3 is a clock heartbeat.
 
-The GUI procedure, expected files, and common setup mistakes are in [docs/vivado_quickstart.md](docs/vivado_quickstart.md).
+The red RESET button is active-low: holding it resets the demo, and releasing it restarts execution. The GUI procedure, expected files, and common setup mistakes are in [docs/vivado_quickstart.md](docs/vivado_quickstart.md).
 
 ## Reading order
 
